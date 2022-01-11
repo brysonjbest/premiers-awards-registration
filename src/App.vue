@@ -5,7 +5,6 @@
     </header>
     <main>
       <img src="./assets/logo.png" alt="Vue.js PWA">
-      <router-view></router-view>
     </main>
   </div>
 </template>

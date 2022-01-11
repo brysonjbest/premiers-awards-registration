@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fa376705-6bdb-4a22-8688-ad08c57f1851" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+    <list default="true" id="88a8ef8d-18c8-40a3-8700-c83a1bbbbb25" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/pa-registration.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.eslintrc.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.postcssrc.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/build.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/check-versions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/dev-client.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/dev-server.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/load-minified.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/service-worker-dev.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/service-worker-prod.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/vue-loader.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/webpack.base.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/webpack.dev.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/webpack.prod.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/webpack.test.conf.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/android-chrome-192x192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/android-chrome-512x512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon-120x120.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon-152x152.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon-180x180.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon-60x60.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon-76x76.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/apple-touch-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/favicon-16x16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/favicon-32x32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/msapplication-icon-144x144.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/mstile-150x150.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/icons/safari-pinned-tab.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/manifest.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,19 +54,11 @@
   <component name="ComposerSettings">
     <execution />
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Vue Single File Component" />
-        <option value="JavaScript File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="23NpSvUFAsHTg5DKIQYIVP0jfV6" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectId" id="23WetTXhfRcEQqdV0M9QqV7LHVA" />
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -36,79 +67,44 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/api" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.13.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="12.20.41" />
     <property name="node.js.detected.package.eslint" value="true" />
-    <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
-    <property name="node.js.selected.package.standard" value="" />
-    <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
-    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/api" />
-      <recent name="$PROJECT_DIR$/src/utils" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/api/controllers" />
-      <recent name="$PROJECT_DIR$/api" />
-    </key>
-  </component>
-  <component name="RunManager" selected="npm.serve">
-    <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:8080">
-      <method v="2" />
-    </configuration>
-    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="npm.build">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
-        <script value="dev" />
+        <script value="build" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="npm serve" type="js.build_tools.npm">
+    <configuration name="install" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
-        <script value="serve" />
+        <script value="install" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
       <method v="2" />
     </configuration>
     <configuration name="serve" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
       <scripts>
         <script value="serve" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="start (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/server/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="start" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="start (2)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/api/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="start" />
       </scripts>
       <node-interpreter value="project" />
       <envs />
@@ -127,22 +123,22 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.startall" />
-        <item itemvalue="npm.start (2)" />
-        <item itemvalue="npm.dev" />
-        <item itemvalue="npm.start (1)" />
         <item itemvalue="npm.serve" />
+        <item itemvalue="npm.build" />
+        <item itemvalue="npm.install" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="fa376705-6bdb-4a22-8688-ad08c57f1851" name="Changes" comment="" />
-      <created>1641584402236</created>
+      <changelist id="88a8ef8d-18c8-40a3-8700-c83a1bbbbb25" name="Changes" comment="" />
+      <created>1641854484803</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1641584402236</updated>
-      <workItem from="1641584406149" duration="19097000" />
+      <updated>1641854484803</updated>
+      <workItem from="1641854488245" duration="1642000" />
+      <workItem from="1641857484465" duration="3176000" />
     </task>
     <servers />
   </component>
@@ -159,6 +155,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
