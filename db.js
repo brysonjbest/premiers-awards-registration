@@ -1,43 +1,34 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
-// Connection URI
-
+// Database configuration settings
 const protocol = 'mongodb://'
-const username = encodeURIComponent("root");
-const password = encodeURIComponent("rootpassword");
-const clusterUrl = "localhost";
-const authMechanism = "DEFAULT";
-
-const databaseHost = process.env.DATABASE_HOST || '';
-const databasePort = process.env.DATABASE_PORT || '';
-const databaseUser = process.env.DATABASE_USER || '';
-const databasePassword = process.env.DATABASE_PASSWORD || '';
-const databaseName = process.env.DATABASE_NAME || '';
+const databaseHost = process.env.DATABASE_HOST || 'localhost';
+const databasePort = process.env.DATABASE_PORT || 27017;
+const databaseUser = process.env.DATABASE_USER || "root";
+const databasePassword = process.env.DATABASE_PASSWORD || "rootpassword";
 const databaseConnectionOpts = process.env.DATABASE_CONNECTION_OPTIONS || '';
+const databaseName = process.env.DATABASE_NAME || 'premiersawards';
 
-const connection = {
-  remoteUrl : `mongodb://${databaseUser.trim()}:${databasePassword}@${databaseHost}:${databasePort}/${databaseName}?${databaseConnectionOpts}`,
-  localUrl: `${protocol}${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
-};
+// define database connection URI
+// const uri = `${protocol}${encodeURIComponent(databaseUser).trim()}:${encodeURIComponent(databasePassword).trim()}@${databaseHost}:${databasePort}/${databaseName}?${databaseConnectionOpts}`;
 
-const uri = databaseHost ? connection.remoteUrl : connection.localUrl;
+// create db connection
+mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
+  auth: {
+    username: databaseUser,
+    password: databasePassword
+  },
+  authSource: "admin",
+  useUnifiedTopology: true,
+  useNewUrlParser: true
+}, console.error);
 
-// Create a new MongoClient
-exports.getClient = () => {
-  return new MongoClient(uri);
-}
+//Bind connection to error event (to get notification of connection errors)
+mongoose.connection.on('error',
+  console.error.bind(console, 'MongoDB connection error:')
+);
 
-/* Check db connection */
-exports.dbtest = async function () {
-  // Connect the client to the server
-  const client = new MongoClient(uri);
-  try {
-    await client.connect();
-    // Establish and verify connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Connected successfully to database server");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
+// Connect to MongoDB
+mongoose.connection.on('connected', () => {
+  console.log('Connected to MongoDB @ 27017');
+});

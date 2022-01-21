@@ -1,0 +1,22 @@
+{
+  "bsonType": "object",
+  "required": ["userid", "guid", "password"],
+  "properties": {
+    "userid": {
+      "bsonType": "string",
+      "description": "user name for application"
+    },
+    "guid": {
+      "bsonType": "string",
+      "description": "user BC Gov GUID"
+    },
+    "password": {
+      "bsonType": "string",
+      "description": "user password"
+    },
+    "fullname": {
+      "bsonType": "string",
+      "description": "user full name"
+    }
+  }
+}

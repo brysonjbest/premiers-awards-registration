@@ -1,0 +1,232 @@
+{
+  "bsonType": "object",
+  "required": [],
+  "properties": {
+    "category": {
+      "bsonType": "string",
+      "description": "category of nomination"
+    },
+    "organization": {
+      "bsonType": "string",
+      "description": "selection from eligible organizations"
+    },
+    "title": {
+      "bsonType": "string",
+      "description": "title or name of nominee for nomination"
+    },
+    "nominees": {
+      "bsonType": "array",
+      "description": "type of nominee",
+      "properties": {
+        "type": {
+          "enum": [ "partner", "nominee" ],
+          "description": "type of nominee"
+        },
+        "firstname": {
+          "bsonType": "string",
+          "description": "given name of the nominee"
+        },
+        "lastname": {
+          "bsonType": "string",
+          "description": "lastname of the nominee"
+        },
+        "organization": {
+          "bsonType": "string",
+          "description": "selection from eligible organizations"
+        }
+      }
+    },
+    "contacts": {
+      "bsonType": "object",
+      "description": "nomination contact information",
+      "properties": {
+        "primary": {
+          "bsonType": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "email",
+            "phone"
+          ],
+          "properties": {
+            "firstname": {
+              "bsonType": "string",
+              "description": "given name of the primary nominator"
+            },
+            "lastname": {
+              "bsonType": "string",
+              "description": "lastname of the primary nominator"
+            },
+            "email": {
+              "bsonType": "string",
+              "description": "email contact of the primary nominator"
+            },
+            "phone": {
+              "bsonType": "string",
+              "description": "phone contact of the primary nominator"
+            }
+          }
+        },
+        "video": {
+          "bsonType": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "email",
+            "locations"
+          ],
+          "properties": {
+            "firstname": {
+              "bsonType": "string",
+              "description": "given name of the nominator"
+            },
+            "lastname": {
+              "bsonType": "string",
+              "description": "lastname of the nominator"
+            },
+            "email": {
+              "bsonType": "string",
+              "description": "email address of the nominator"
+            },
+            "locations": {
+              "bsonType": "array",
+              "required": [
+                "address",
+                "city"
+              ],
+              "description": "film locations",
+              "properties": {
+                "address": {
+                  "bsonType": "string",
+                  "description": "address of film location"
+                },
+                "city": {
+                  "bsonType": "string",
+                  "description": "city of film location"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "nominators": {
+      "bsonType": "object",
+      "description": "list of nominators",
+      "properties": {
+        "nominator_1": {
+          "bsonType": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "email"
+          ],
+          "properties": {
+            "firstname": {
+              "bsonType": "string",
+              "description": "given name of the nominator"
+            },
+            "lastname": {
+              "bsonType": "string",
+              "description": "lastname of the nominator"
+            },
+            "email": {
+              "bsonType": "string",
+              "description": "email address of the nominator"
+            }
+          }
+        },
+        "nominator_2": {
+          "bsonType": "object",
+          "required": [
+            "firstname",
+            "lastname",
+            "email"
+          ],
+          "properties": {
+            "firstname": {
+              "bsonType": "string",
+              "description": "given name of the nominator"
+            },
+            "lastname": {
+              "bsonType": "string",
+              "description": "lastname of the nominator"
+            },
+            "email": {
+              "bsonType": "string",
+              "description": "email address of the nominator"
+            }
+          }
+        }
+      }
+    },
+    "acknowledgment": {
+      "bsonType": "string",
+      "description": "contact acknowledgement checkbox"
+    },
+    "evaluation": {
+      "bsonType": "object",
+      "required": [
+        "summary",
+        "context",
+        "impact"
+      ],
+      "properties": {
+        "summary": {
+          "bsonType": "string",
+          "description": "brief statement summarizing nomination"
+        },
+        "context": {
+          "bsonType": "string",
+          "description": "background and perspective on nomination"
+        },
+        "complexity": {
+          "bsonType": "string",
+          "description": "scope and scale of nomination project"
+        },
+        "approach": {
+          "bsonType": "string",
+          "description": "approach of nomination project"
+        },
+        "valuing_people": {
+          "bsonType": "string",
+          "description": "description of team-focused values"
+        },
+        "commitment": {
+          "bsonType": "string",
+          "description": "commitment to the organization"
+        },
+        "contribution": {
+          "bsonType": "string",
+          "description": "contribution to BC Public Service"
+        },
+        "impact": {
+          "bsonType": "string",
+          "description": "impact of the innovative approach"
+        }
+      }
+    },
+    "attachments": {
+      "bsonType": "array",
+      "description": "file attachments",
+      "properties": {
+        "filename": {
+          "bsonType": "string",
+          "description": "file attachment filename including extension"
+        },
+        "reference": {
+          "bsonType": "string",
+          "description": "file attachment reference value"
+        },
+        "label": {
+          "bsonType": "string",
+          "description": "label of file attachment"
+        },
+        "description": {
+          "bsonType": "string",
+          "description": "short description of file attachment"
+        }
+      }
+    }
+  }
+}
