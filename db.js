@@ -12,6 +12,7 @@ const databaseName = process.env.DATABASE_NAME || 'premiersawards';
 // define database connection URI
 // const uri = `${protocol}${encodeURIComponent(databaseUser).trim()}:${encodeURIComponent(databasePassword).trim()}@${databaseHost}:${databasePort}/${databaseName}?${databaseConnectionOpts}`;
 
+
 // create db connection
 mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
   auth: {
