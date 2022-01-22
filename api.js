@@ -37,7 +37,8 @@ app.use(helmet());
 const allowedOrigins = [
   "http://localhost:8080",
   "http://localhost:8081",
-  "http://pa-dev.apps.silver.devops.gov.bc.ca",
+  "http://localhost",
+  "https://pa-dev.apps.silver.devops.gov.bc.ca",
   "http://pa-app-node"
 ];
 
