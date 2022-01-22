@@ -8,7 +8,7 @@ const router = require('./routes/router')
 const secureRouter = require('./routes/secure.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
+// const helmet = require('helmet');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,9 +32,9 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.disable('x-powered-by');
-app.use(helmet({
-  contentSecurityPolicy: false,
-}));
+// app.use(helmet({
+//   contentSecurityPolicy: false,
+// }));
 
 const allowedOrigins = [
   "http://localhost:8080",
