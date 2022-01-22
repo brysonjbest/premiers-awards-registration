@@ -69,17 +69,17 @@ app.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
 
-// Serve static frontend files
-const path = __dirname + '/views/';
-console.log('Serving files at ', path);
-app.use(express.static(path));
-
 // Initialize API routes
 app.use('/api', router);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
 app.use('/auth', secureRouter);
+
+// Serve static frontend files
+const path = __dirname + '/views/';
+console.log('Serving files at ', path);
+app.use(express.static(path));
 
 // static file routes
 app.get('/', function (req,res) {
