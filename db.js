@@ -19,15 +19,15 @@ mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
     username: databaseUser,
     password: databasePassword
   },
-  authSource: databaseName,
+  authSource: process.env.DATABASE_NAME || 'admin',
   useUnifiedTopology: true,
   useNewUrlParser: true
 }, console.error);
 
-//Bind connection to error event (to get notification of connection errors)
-mongoose.connection.on('error',
-  console.error.bind(console, 'MongoDB connection error:')
-);
+// Bind connection to error event (to get notification of connection errors)
+// mongoose.connection.on('error',
+//   console.error.bind(console, 'MongoDB connection error:')
+// );
 
 // Connect to MongoDB
 mongoose.connection.on('connected', () => {
