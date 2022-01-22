@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const history = require('connect-history-api-fallback');
 const app = express();
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
@@ -10,6 +11,7 @@ const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
 
+app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
