@@ -34,7 +34,10 @@ const NominationSchema = new Schema(
       type: String,
       required: true
     },
-    user: { type: Schema.Types.ObjectId, ref: 'users' },
+    guid: {
+      type: String,
+      required: true
+    },
     organization: {
       type: String,
       required: true

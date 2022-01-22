@@ -19,7 +19,7 @@ mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
     username: databaseUser,
     password: databasePassword
   },
-  authSource: "admin",
+  authSource: databaseName,
   useUnifiedTopology: true,
   useNewUrlParser: true
 }, console.error);

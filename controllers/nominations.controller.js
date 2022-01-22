@@ -49,8 +49,10 @@ exports.getByUserID = async (req, res, next) => {
     // TODO: secure to only authenticated user nominations
     const data = req.body;
     const { guid='' } = data;
+
+    // look up user by GUID
     const user = await UserModel.find({guid: guid});
-    const nominations = await NominationModel.find({guid: guid});
+    const nominations = await NominationModel.find({user: user._id});
 
     // get linked data referenced in node tree
     return res.status(200).json(
@@ -86,8 +88,7 @@ exports.create = async (req, res, next) => {
 
       console.log(nomination)
 
-      res.status(200).json(
-        {
+      res.status(200).json({
           view: 'add',
           type: type,
           id: nomination,
