@@ -32,7 +32,9 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.disable('x-powered-by');
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false,
+}));
 
 const allowedOrigins = [
   "http://localhost:8080",
