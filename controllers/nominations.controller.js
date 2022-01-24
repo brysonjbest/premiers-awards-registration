@@ -19,7 +19,7 @@ exports.get = async (req, res, next) => {
 
   try {
     const { id=null } = req.params || {};
-    const nomination = await NominationModel.findOne({_id: id});
+    const nomination = await NominationModel.findById(id);
 
     // get linked data referenced in node tree
     return res.status(200).json(
@@ -47,12 +47,15 @@ exports.getByUserID = async (req, res, next) => {
 
   try {
     // TODO: secure to only authenticated user nominations
-    const data = req.body;
-    const { guid='' } = data;
+    const { id=null } = req.params || {};
 
     // look up user by GUID
-    const user = await UserModel.find({guid: guid});
-    const nominations = await NominationModel.find({user: user._id});
+    const user = await UserModel.findOne({guid: id});
+    if (!user)
+      return next(Error('invalidInput'));
+
+    // retrieve attached nominations
+    const nominations = await NominationModel.find({guid: user.guid});
 
     // get linked data referenced in node tree
     return res.status(200).json(
@@ -69,7 +72,7 @@ exports.getByUserID = async (req, res, next) => {
 
 
 /**
- * Add new nomination
+ * Create new nomination
  *
  * @param req
  * @param res
@@ -79,20 +82,17 @@ exports.getByUserID = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
     try {
-      let type = req.params.type;
       let data = req.body;
 
       // insert new record into collection
-      // Create user in our database
       const nomination = await NominationModel.create(data);
-
-      console.log(nomination)
+      const { _id = '', category='', year=''} = nomination || {};
 
       res.status(200).json({
-          view: 'add',
-          type: type,
-          id: nomination,
-          data: data
+          id: _id,
+          category: category,
+          year: year,
+          data: nomination
         });
 
     } catch (err) {
@@ -112,22 +112,49 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
 
   try {
-
-    // get requested parameters
-    let type = req.params.type;
     let id = req.params.id;
-
     let data = req.body;
 
-    console.log(data)
+    // update existing document in collection
+    const nomination = await NominationModel.updateOne(data);
 
-    res.status(200).json(
-      {
-        view: 'update',
-        type: type,
-        id: id,
-        data: data
-      });
+    console.log(nomination)
+
+    res.status(200).json({
+      id: id,
+      data: data
+    });
+
+  } catch (err) {
+    return next(err);
+  }
+
+};
+
+/**
+ * Submit nomination
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @src public
+ */
+
+exports.submit = async (req, res, next) => {
+
+  try {
+    let id = req.params.id;
+    let data = req.body;
+
+    // submit nomination document as completed
+    const nomination = await NominationModel.updateOne(data);
+
+    console.log(nomination)
+
+    res.status(200).json({
+      id: id,
+      data: data
+    });
 
   } catch (err) {
     return next(err);
@@ -148,20 +175,21 @@ exports.delete = async (req, res, next) => {
 
   try {
 
-    // get requested parameters
-    let type = req.params.type;
+    // get requested nomination ID
     let id = req.params.id;
 
-    let data = req.body;
+    // look up user by GUID
+    const nomination = await NominationModel.findById(id);
+    if (!nomination)
+      return next(Error('invalidInput'));
 
-    console.log(data)
+    // delete nomination
+    const response = await NominationModel.deleteOne({_id: id})
 
     res.status(200).json(
       {
-        view: 'add',
-        type: type,
         id: id,
-        data: data
+        data: response
       });
 
   } catch (err) {

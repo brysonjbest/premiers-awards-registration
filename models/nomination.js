@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const NomineeSchema = new Schema({
-    type            : String,
+    type            : {
+      type: String,
+      enum: ['nominator', 'partner'],
+    },
     firstname       : String,
     lastname        : String,
     organization    : String
@@ -34,17 +37,25 @@ const NominationSchema = new Schema(
       type: String,
       required: true
     },
+    year: {
+      type: Number,
+      required: true
+    },
     guid: {
       type: String,
       required: true
     },
+    submitted: {
+      type: Boolean,
+      required: true
+    },
     organization: {
       type: String,
-      required: true
+      required: function() { return this.submitted }
     },
     title: {
       type: String,
-      required: false
+      required: function() { return this.submitted }
     },
     nominees: [NomineeSchema],
     contacts: {
@@ -62,7 +73,11 @@ const NominationSchema = new Schema(
       }
     },
     nominators: [NominatorSchema],
-    acknowledgment: String,
+    acknowledgment: {
+      type: String,
+      enum: ['accepted', 'not_accepted'],
+      required: true
+    },
     evaluation: {
       summary: String,
       context: String,
@@ -74,7 +89,9 @@ const NominationSchema = new Schema(
       impact: String
     },
     attachments: [AttachmentSchema]
-  });
+  },
+  { timestamps: true }
+);
 
 
 

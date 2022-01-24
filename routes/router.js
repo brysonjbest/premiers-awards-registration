@@ -15,10 +15,11 @@ router.get('/', function (req, res, next) {
 });
 
 // define nomination routes
-router.post('/nominations/', nominationController.getByUserID);
-router.post('/nomination/:type/create', nominationController.create);
-router.post('/nomination/:type/update', nominationController.update);
-router.post('/nomination/:type/delete', nominationController.delete);
-router.get('/nomination/:type/:id', nominationController.get);
+router.get('/nominations/view/:id', nominationController.get);
+router.get('/nominations/user/:id', nominationController.getByUserID);
+router.post('/nominations/create', nominationController.create);
+router.post('/nominations/update/:id', nominationController.update);
+router.post('/nominations/submit/:id', nominationController.submit);
+router.get('/nominations/delete/:id', nominationController.delete);
 
 module.exports = router;
