@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+console.log(process.env)
+
 // Database configuration settings
 const protocol = 'mongodb://'
 const databaseHost = process.env.DATABASE_HOST || 'localhost';
