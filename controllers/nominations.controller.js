@@ -55,7 +55,7 @@ exports.getByUserID = async (req, res, next) => {
     //   return next(Error('invalidInput'));
 
     // retrieve attached nominations
-    const nominations = await NominationModel.find({guid: user.guid});
+    const nominations = await NominationModel.find({guid: id});
 
     // get linked data referenced in node tree
     return res.status(200).json(
