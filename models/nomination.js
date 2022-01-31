@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const NomineeSchema = new Schema({
     type            : {
       type: String,
-      enum: ['nominee', 'partner'],
+      enum: ['', 'nominee', 'partner'],
     },
     firstname       : String,
     lastname        : String,
