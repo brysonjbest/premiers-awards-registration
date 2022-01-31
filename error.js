@@ -116,10 +116,17 @@ const errors = {
     status: 403,
     type: 'error'
   },
-  schemaMismatch: {
-    hint: 'User input data found to be invalid for a given models schema. Check setData() method in constructor.',
-    msg: 'Input data does not match models schema.',
-    status: 500,
+  maxDraftsExceeded: {
+    hint: 'Maximum number of drafts allowed for user.',
+    msg: 'You have reached the maximum number of draft nominations for your account.',
+    status: 422,
+    type: 'error'
+  },
+
+  alreadySubmitted: {
+    hint: 'Nomination has submitted status.',
+    msg: 'Cannot update a submitted nomination.',
+    status: 422,
     type: 'error'
   },
   EEXIST: {

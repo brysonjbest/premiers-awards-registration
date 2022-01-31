@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-console.log(process.env)
-
 // Database configuration settings
 const protocol = 'mongodb://'
 const databaseHost = process.env.DATABASE_HOST || 'localhost';
@@ -24,7 +22,7 @@ mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
   authSource: process.env.DATABASE_NAME || 'admin',
   useUnifiedTopology: true,
   useNewUrlParser: true
-}, console.error);
+}, (err)=>{ if (err) console.error(err); });
 
 // Bind connection to error event (to get notification of connection errors)
 // mongoose.connection.on('error',

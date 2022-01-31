@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const NomineeSchema = new Schema({
     type            : {
       type: String,
-      enum: ['nominator', 'partner'],
+      enum: ['nominee', 'partner'],
     },
     firstname       : String,
     lastname        : String,
@@ -25,10 +25,9 @@ const LocationSchema = new Schema({
 });
 
 const AttachmentSchema = new Schema({
-    filename        : String,
+    file            : Object,
     label           : String,
-    description     : String,
-    reference       : String
+    description     : String
 });
 
 const NominationSchema = new Schema(
@@ -76,7 +75,7 @@ const NominationSchema = new Schema(
     acknowledgment: {
       type: String,
       enum: ['accepted', 'not_accepted'],
-      required: true
+      required: function() { return this.submitted }
     },
     evaluation: {
       summary: String,
