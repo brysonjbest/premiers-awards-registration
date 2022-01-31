@@ -5,8 +5,6 @@
 
 const NominationModel = require('../models/nomination');
 
-
-
 /**
  * Upload attachment files
  *

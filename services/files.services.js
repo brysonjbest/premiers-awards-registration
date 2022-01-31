@@ -7,7 +7,7 @@ const multer = require('multer');
 const libre = require('libreoffice-convert');
 libre.convertAsync = require('util').promisify(libre.convert);
 
-const dataPath = process.env.UPLOADS_DIR || '/Users/sprose/Workspace/Docker/pa-app/data/'
+const dataPath = process.env.DATA_PATH || '/Users/sprose/Workspace/Docker/pa-app/data/'
 const maxUploads = 5;
 const acceptedMIMETypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
