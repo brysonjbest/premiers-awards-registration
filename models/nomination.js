@@ -5,6 +5,7 @@ const Schema = mongoose.Schema;
 const NomineeSchema = new Schema({
     type            : {
       type: String,
+      default: 'nominee',
       enum: ['nominee', 'partner'],
     },
     firstname       : String,
