@@ -5,8 +5,10 @@ const history = require('connect-history-api-fallback');
 const app = express();
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
-const router = require('./routes/router')
-const secureRouter = require('./routes/secure.router');
+const config = require('./config.js');
+const indexRouter = require('./routes/index.router');
+const apiRouter = require('./routes/api.router');
+// const secureRouter = require('./routes/secure.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
@@ -74,22 +76,19 @@ app.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
 
-// Initialize API routes
-app.use(`${slug}/api`, router);
+
+// initialize index router for API calls -> /api
+indexRouter.use('/api', apiRouter);
+app.use(config.baseUrl, indexRouter);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-app.use(`${slug}/auth`, secureRouter);
+// app.use(`${slug}/auth`, secureRouter);
 
 // Serve static frontend files
 const path = __dirname + '/views/';
 console.log('Serving files at ', path);
 app.use(slug, express.static(path));
-
-// static file routes
-app.get('/', function (req,res) {
-  res.sendFile(path + "index.html");
-});
 
 // handle generic errors
 app.use(globalHandler);
