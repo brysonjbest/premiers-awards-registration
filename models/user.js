@@ -74,7 +74,6 @@ UserSchema.methods.validPassword = function(password) {
     this.salt, 1000, 64, `sha512`).toString(`hex`);
   return this.hash === hash;
 };
-
-const UserModel = mongoose.model('users', UserSchema);
+const UserModel = mongoose.model('User', UserSchema, 'nominations');
 
 module.exports = UserModel;

@@ -15,6 +15,8 @@ app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// get subdirectory for nominations
+const slug = '/nominations';
 
 /**
  * Express Security Middleware
@@ -43,7 +45,7 @@ const allowedOrigins = [
   "http://localhost:8080",
   "http://localhost:8081",
   "http://localhost",
-  "https://pa-dev.apps.silver.devops.gov.bc.ca",
+  "https://premiersawards.gww.gov.bc.ca",
   "http://pa-app-node"
 ];
 
@@ -73,16 +75,16 @@ app.use(cookieParser(
 ));
 
 // Initialize API routes
-app.use('/api', router);
+app.use(`${slug}/api`, router);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-app.use('/auth', secureRouter);
+app.use(`${slug}/auth`, secureRouter);
 
 // Serve static frontend files
 const path = __dirname + '/views/';
 console.log('Serving files at ', path);
-app.use(express.static(path));
+app.use(slug, express.static(path));
 
 // static file routes
 app.get('/', function (req,res) {

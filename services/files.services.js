@@ -68,7 +68,28 @@ const uploader = multer({
       }
     }
   });
-exports.uploader = uploader.array('attachment', maxUploads);
+exports.uploader = uploader.array('file', maxUploads);
+
+
+/**
+ * Delete file from storage
+ * @param filePath
+ */
+
+const deleteFile = async function(filePath) {
+  return fs.stat(filePath, async (err, stat) => {
+    if (err == null) {
+      return await Fs.unlink(filePath);
+    } else if (err.code === 'ENOENT') {
+      // file does not exist (ignore)
+      console.warn(err);
+      return null;
+    } else {
+      throw err;
+    }
+  });
+}
+exports.deleteFile = deleteFile;
 
 
 /**

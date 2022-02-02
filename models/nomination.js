@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
+
+/**
+ * Nominee schema
+ */
 
 const NomineeSchema = new Schema({
     type            : {
@@ -13,6 +16,10 @@ const NomineeSchema = new Schema({
     organization    : String
 });
 
+/**
+ * Nominator schema
+ */
+
 const NominatorSchema = new Schema({
     firstname       : String,
     lastname        : String,
@@ -20,19 +27,24 @@ const NominatorSchema = new Schema({
     email           : String
 });
 
+/**
+ * Location schema
+ */
+
 const LocationSchema = new Schema({
     address         : String,
     city            : String
 });
 
-const AttachmentSchema = new Schema({
-    file            : Object,
-    label           : String,
-    description     : String
-});
+/**
+ * Nomination schema
+ */
 
 const NominationSchema = new Schema(
   {
+    seq: {
+      type: Number
+    },
     category: {
       type: String,
       required: true
@@ -54,8 +66,7 @@ const NominationSchema = new Schema(
       required: function() { return this.submitted }
     },
     title: {
-      type: String,
-      required: function() { return this.submitted }
+      type: String
     },
     nominees: [NomineeSchema],
     contacts: {
@@ -76,6 +87,7 @@ const NominationSchema = new Schema(
     acknowledgment: {
       type: String,
       enum: ['accepted', 'not_accepted'],
+      default: 'not_accepted',
       required: function() { return this.submitted }
     },
     evaluation: {
@@ -88,13 +100,13 @@ const NominationSchema = new Schema(
       contribution: String,
       impact: String
     },
-    attachments: [AttachmentSchema]
+    attachments: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Attachment'
+    }]
   },
   { timestamps: true }
 );
 
-
-
-const NominationModel = mongoose.model('nominations', NominationSchema);
-
+const NominationModel = mongoose.model('Nomination', NominationSchema, 'nominations');
 module.exports = NominationModel;

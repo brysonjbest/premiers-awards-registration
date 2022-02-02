@@ -4,7 +4,8 @@
  * **/
 
 const NominationModel = require('../models/nomination');
-const { createPDF, fileExists, createZIP } = require('../services/files.services')
+const counter = require('../models/counter');
+const { createPDF, fileExists, createZIP } = require('../services/files.services');
 const path = require('path');
 const { Readable } = require('stream');
 
@@ -106,6 +107,16 @@ exports.create = async (req, res, next) => {
       if (currentNominations.length > maxNumberOfDrafts)
         return next(new Error('maxDraftsExceeded'));
 
+      /**
+       * Auto-increment nomination sequence number on save
+       */
+      const result = await counter.findByIdAndUpdate(
+        {_id: 'nominationId'},
+        { $inc: { seq: 1} },
+        { upsert: true }
+      );
+      data.seq = result.seq;
+
       // insert new record into collection
       const nomination = await NominationModel.create(data);
       const { id=null } = nomination || {};
@@ -145,6 +156,8 @@ exports.update = async (req, res, next) => {
     // reject updates to submitted nominations
     if (nomination.submitted)
       return next(Error('alreadySubmitted'));
+
+    data.saved = true;
 
     // update existing document in collection
     const response = await NominationModel.updateOne({ _id: id }, data);
@@ -210,13 +223,12 @@ exports.submit = async (req, res, next) => {
  */
 
 exports.delete = async (req, res, next) => {
-
   try {
 
     // get requested nomination ID
     let id = req.params.id;
 
-    // look up user by GUID
+    // look up nomination
     const nomination = await NominationModel.findById(id);
     if (!nomination)
       return next(Error('noRecord'));
@@ -229,7 +241,6 @@ exports.delete = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-
 };
 
 
@@ -318,3 +329,4 @@ exports.download = async (req, res, next) => {
     return next(err);
   }
 };
+
