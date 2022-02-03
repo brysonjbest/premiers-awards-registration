@@ -7,7 +7,7 @@ const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
 const config = require('./config.js');
 const indexRouter = require('./routes/index.router');
-const apiRouter = require('./routes/api.router');
+const router = require('./routes/api.router');
 // const secureRouter = require('./routes/secure.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
@@ -78,7 +78,7 @@ app.use(cookieParser(
 
 
 // initialize index router for API calls -> /api
-indexRouter.use('/api', apiRouter);
+indexRouter.use('/api', router);
 app.use(config.baseUrl, indexRouter);
 
 // Initialize authentication routes
