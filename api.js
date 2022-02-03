@@ -63,9 +63,9 @@ frontend.use(express.urlencoded({ extended: true }));
 frontend.use(cors(corsConfig));
 frontend.use(history());
 
-frontend.use('/', express.static(path.join(__dirname, 'views')));
-console.log('Serving asset files at ', path.join(__dirname, 'views'));
+console.log('Serving frontend files at ', path.join(__dirname, 'views'));
 frontend.get('/', frontendRouter);
+frontend.use('/', express.static(path.join(__dirname, 'views')));
 
 // create API app
 const api = express();

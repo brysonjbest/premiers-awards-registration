@@ -1,5 +1,4 @@
 const express = require('express')
-const path = require('path')
 const router = express.Router()
 
 // middleware that is specific to this routes
@@ -13,7 +12,5 @@ router.use(function timeLog (req, res, next) {
 router.get('/', function (req, res) {
     res.sendFile('/app/views/index.html');
 });
-
-console.log('Frontend served at: ', path.join(__dirname, 'views'))
 
 module.exports = router;
