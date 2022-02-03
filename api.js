@@ -7,7 +7,8 @@ const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
 const config = require('./config.js');
 const indexRouter = require('./routes/index.router');
-const apiRouter = require('./routes/api.router');
+const dataRouter = require('./routes/data.router');
+const attachmentsRouter = require('./routes/attachments.router');
 const secureRouter = require('./routes/secure.router');
 const frontendRouter = require('./routes/frontend.router');
 const db = require('./db');
@@ -78,27 +79,22 @@ api.use(express.urlencoded({ extended: true }));
 api.use(cors(corsConfig));
 
 // apply router middleware
-// - serve static frontend files
 api.use('/', indexRouter);
+
+// initialize router for nomination API calls
+indexRouter.use('/data', dataRouter);
+
+// initialize router for attachment API calls
+indexRouter.use('/attachments', attachmentsRouter);
+
+// Initialize router for authentication API calls
+// TODO: Plug in the JWT strategy as a middleware so only verified users can access this route.
+indexRouter.use('/auth', secureRouter);
 
 // parse cookies to store JWT session tokens.
 api.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
-
-// // initialize index router for API calls -> /api
-// indexRouter.use('/api', apiRouter);
-//
-// // Initialize authentication routes
-// // Plug in the JWT strategy as a middleware so only verified users can access this route.
-// indexRouter.use('/auth', secureRouter);
-//
-
-//
-// indexRouter.get('/', function(req, res) {
-//   res.sendFile(path + "index.html");
-// });
-//
 
 // handle generic errors
 api.use(globalHandler);
