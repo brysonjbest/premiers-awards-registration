@@ -92,7 +92,7 @@ indexRouter.get('/', function(req, res) {
   res.sendFile(path + "index.html");
 });
 
-app.use(config.baseUrl, indexRouter);
+app.use('/', indexRouter);
 
 // handle generic errors
 app.use(globalHandler);
