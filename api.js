@@ -57,13 +57,15 @@ const corsConfig = {
 // create frontend app
 const frontend = express();
 frontend.disable('x-powered-by');
+frontend.use(express.json());
+frontend.use(express.urlencoded({ extended: true }));
 frontend.use(cors(corsConfig));
 frontend.use(history());
 console.log('Serving files at ', path.join(__dirname, 'views'));
-frontend.use('/', express.static(path.resolve(__dirname, 'views')));
 frontend.get('/', function (req,res) {
   res.sendFile(path + "index.html");
 });
+frontend.use('/', express.static(path.resolve(__dirname, 'views')));
 
 // create API app
 const api = express();
