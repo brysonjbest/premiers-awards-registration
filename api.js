@@ -87,8 +87,8 @@ app.use(config.baseUrl, indexRouter);
 
 // Serve static frontend files
 const path = __dirname + '/views/';
-console.log('Serving files at ', path);
-app.use('/nominations', express.static(path));
+// console.log('Serving files at ', path);
+// app.use('/static', express.static(path));
 
 indexRouter.get(config.baseUrl, function(req, res) {
   res.sendFile(path + "index.html");

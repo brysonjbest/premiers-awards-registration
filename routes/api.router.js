@@ -17,14 +17,14 @@ router.get('/', function (req, res, next) {
 });
 
 // define nomination routes
-router.get('/nominations/view/:id', nominationController.get);
-router.get('/nominations/view/', nominationController.getAll);
-router.get('/nominations/user/:id', nominationController.getByUserID);
-router.post('/nominations/create', nominationController.create);
-router.post('/nominations/update/:id', nominationController.update);
-router.post('/nominations/export/', nominationController.exporter);
-router.post('/nominations/submit/:id', nominationController.submit);
-router.get('/nominations/delete/:id', nominationController.delete);
+router.get('/data/view/:id', nominationController.get);
+router.get('/data/view/', nominationController.getAll);
+router.get('/data/user/:id', nominationController.getByUserID);
+router.post('/data/create', nominationController.create);
+router.post('/data/update/:id', nominationController.update);
+router.post('/data/export/', nominationController.exporter);
+router.post('/data/submit/:id', nominationController.submit);
+router.get('/data/delete/:id', nominationController.delete);
 
 // define attachments routes
 router.post('/attachments/upload/:year/:id', uploader, attachmentController.upload);
