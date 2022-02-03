@@ -18,7 +18,7 @@ const frontend = express();
 frontend.disable('x-powered-by');
 // frontend.use(history());
 console.log('Serving files at ', path.join(__dirname, 'views'));
-frontend.use('/', express.static(path.resolve(__dirname, 'views')));
+frontend.use('/nominations', express.static(path.resolve(__dirname, 'views')));
 
 // create API app
 const api = express();
@@ -49,8 +49,8 @@ api.disable('x-powered-by');
 // }));
 
 const allowedOrigins = [
-  "http://localhost:8080",
-  "http://localhost:8081",
+  "http://localhost:3000",
+  "http://localhost:3001",
   "http://localhost",
   "https://premiersawards.gww.gov.bc.ca",
   "http://pa-app-node"
