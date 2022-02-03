@@ -88,7 +88,7 @@ const path = __dirname + '/views/';
 // console.log('Serving files at ', path);
 // app.use('/static', express.static(path));
 
-indexRouter.get(config.baseUrl, function(req, res) {
+indexRouter.get('/', function(req, res) {
   res.sendFile(path + "index.html");
 });
 
