@@ -77,7 +77,7 @@ app.use(cookieParser(
 ));
 
 // initialize index router for API calls -> /api
-indexRouter.use('/api', apiRouter);
+indexRouter.use('/nominations/api', apiRouter);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
