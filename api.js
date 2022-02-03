@@ -77,7 +77,7 @@ app.use(cookieParser(
 ));
 
 // initialize index router for API calls -> /api
-indexRouter.use('/nominations/api', apiRouter);
+indexRouter.use('/api', apiRouter);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
@@ -88,7 +88,7 @@ app.use(config.baseUrl, indexRouter);
 // Serve static frontend files
 const path = __dirname + '/views/';
 console.log('Serving files at ', path);
-app.use(config.baseUrl, express.static(path));
+app.use('/nominations', express.static(path));
 
 indexRouter.get(config.baseUrl, function(req, res) {
   res.sendFile(path + "index.html");
@@ -101,7 +101,7 @@ app.use(globalHandler);
 app.use(notFoundHandler);
 
 // set port, listen for requests
-const PORT = process.env.API_PORT || 8080;
+const PORT = process.env.API_PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
