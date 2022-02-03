@@ -64,7 +64,7 @@ frontend.use(cors(corsConfig));
 frontend.use(history());
 
 frontend.use('/', express.static(path.join(__dirname, 'views')));
-console.log('Serving files at ', path.join(__dirname, 'views'));
+console.log('Serving asset files at ', path.join(__dirname, 'views'));
 frontend.get('/', frontendRouter);
 
 // create API app

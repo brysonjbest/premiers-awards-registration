@@ -11,7 +11,7 @@ router.use(function timeLog (req, res, next) {
 
 // serve SPA index page
 router.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile('/app/views/index.html');
 });
 
 console.log('Frontend served at: ', path.join(__dirname, 'views'))
