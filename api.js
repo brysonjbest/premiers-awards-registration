@@ -60,8 +60,8 @@ frontend.disable('x-powered-by');
 frontend.use(cors(corsConfig));
 frontend.use(history());
 console.log('Serving files at ', path.join(__dirname, 'views'));
-frontend.use('/nominations', express.static(path.resolve(__dirname, 'views')));
-frontend.get('/nominations', function (req,res) {
+frontend.use('/', express.static(path.resolve(__dirname, 'views')));
+frontend.get('/', function (req,res) {
   res.sendFile(path + "index.html");
 });
 
