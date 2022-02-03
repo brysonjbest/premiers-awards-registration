@@ -13,18 +13,6 @@ const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
 
-// create frontend app
-const frontend = express();
-frontend.disable('x-powered-by');
-// frontend.use(history());
-console.log('Serving files at ', path.join(__dirname, 'views'));
-frontend.use('/nominations', express.static(path.resolve(__dirname, 'views')));
-
-// create API app
-const api = express();
-api.use(express.json());
-api.use(express.urlencoded({ extended: true }));
-
 /**
  * Express Security Middleware
  *
@@ -42,11 +30,6 @@ api.use(express.urlencoded({ extended: true }));
  *
  *   Online checker: http://cyh.herokuapp.com/cyh.
  */
-
-api.disable('x-powered-by');
-// app.use(helmet({
-//   contentSecurityPolicy: false,
-// }));
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -71,7 +54,25 @@ const corsConfig = {
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
+// create frontend app
+const frontend = express();
+frontend.disable('x-powered-by');
 frontend.use(cors(corsConfig));
+// frontend.use(history());
+console.log('Serving files at ', path.join(__dirname, 'views'));
+frontend.use('/nominations', express.static(path.resolve(__dirname, 'views')));
+frontend.get('/nominations', function (req,res) {
+  res.sendFile(path + "index.html");
+});
+
+// create API app
+const api = express();
+api.disable('x-powered-by');
+// app.use(helmet({
+//   contentSecurityPolicy: false,
+// }));
+api.use(express.json());
+api.use(express.urlencoded({ extended: true }));
 api.use(cors(corsConfig));
 
 // apply router middleware
