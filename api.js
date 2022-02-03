@@ -9,6 +9,7 @@ const config = require('./config.js');
 const indexRouter = require('./routes/index.router');
 const apiRouter = require('./routes/api.router');
 const secureRouter = require('./routes/secure.router');
+const frontendRouter = require('./routes/frontend.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
@@ -61,11 +62,10 @@ frontend.use(express.json());
 frontend.use(express.urlencoded({ extended: true }));
 frontend.use(cors(corsConfig));
 frontend.use(history());
+
+frontend.use('/', express.static(path.join(__dirname, 'views')));
 console.log('Serving files at ', path.join(__dirname, 'views'));
-frontend.get('/', function (req,res) {
-  res.sendFile(path + "index.html");
-});
-frontend.use('/', express.static(path.resolve(__dirname, 'views')));
+frontend.get('/', frontendRouter);
 
 // create API app
 const api = express();
