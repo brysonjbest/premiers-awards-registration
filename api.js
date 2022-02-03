@@ -14,7 +14,7 @@ const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
 
-app.use(history());
+// app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -70,7 +70,7 @@ app.use(cors({
 // - serve static frontend files
 app.use('/', indexRouter);
 console.log('Serving files at ', path.join(__dirname, 'views'));
-app.use('/static', express.static(path.resolve(__dirname, 'views')));
+app.use('/', express.static(path.resolve(__dirname, 'views')));
 
 /**
  * Parse cookies to store JWT session tokens.
