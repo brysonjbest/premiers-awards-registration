@@ -76,6 +76,13 @@ app.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
 
+// time logging middleware
+indexRouter.use(function timeLog (req, res, next) {
+  const d = new Date();
+  console.log('Request: ', req.path, d);
+  next();
+});
+
 // initialize index router for API calls -> /api
 indexRouter.use('/api', apiRouter);
 

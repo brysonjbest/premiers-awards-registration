@@ -4,13 +4,6 @@ const nominationController = require('../controllers/nominations.controller')
 const attachmentController = require('../controllers/attachments.controller')
 const { uploader } = require('../services/files.services')
 
-// time logging middleware
-router.use(function timeLog (req, res, next) {
-  const d = new Date();
-  console.log('Request: ', req.path, d);
-  next();
-});
-
 // define nomination routes
 router.get('/data/view/:id', nominationController.get);
 router.get('/data/view/', nominationController.getAll);
