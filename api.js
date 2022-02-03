@@ -6,9 +6,9 @@ const app = express();
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
 const config = require('./config.js');
-const indexRouter = require('./routes/index.router');
-const router = require('./routes/api.router');
-// const secureRouter = require('./routes/secure.router');
+const indexRouter = express.Router();
+const apiRouter = require('./routes/api.router');
+const secureRouter = require('./routes/secure.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
@@ -76,19 +76,23 @@ app.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
 
-
 // initialize index router for API calls -> /api
-indexRouter.use('/api', router);
-app.use(config.baseUrl, indexRouter);
+indexRouter.use('/api', apiRouter);
 
 // Initialize authentication routes
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
-// app.use(`${slug}/auth`, secureRouter);
+indexRouter.use('/auth', secureRouter);
+
+app.use(config.baseUrl, indexRouter);
 
 // Serve static frontend files
 const path = __dirname + '/views/';
 console.log('Serving files at ', path);
-app.use(slug, express.static(path));
+app.use(config.baseUrl, express.static(path));
+
+indexRouter.get(config.baseUrl, function(req, res) {
+  res.sendFile(path + "index.html");
+});
 
 // handle generic errors
 app.use(globalHandler);
