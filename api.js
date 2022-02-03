@@ -2,7 +2,6 @@
 
 const express = require('express');
 const history = require('connect-history-api-fallback');
-const app = express();
 const path = require('path');
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
@@ -14,9 +13,17 @@ const db = require('./db');
 const cookieParser = require('cookie-parser');
 // const helmet = require('helmet');
 
-// app.use(history());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// create frontend app
+const frontend = express();
+frontend.disable('x-powered-by');
+// frontend.use(history());
+console.log('Serving files at ', path.join(__dirname, 'views'));
+frontend.use('/', express.static(path.resolve(__dirname, 'views')));
+
+// create API app
+const api = express();
+api.use(express.json());
+api.use(express.urlencoded({ extended: true }));
 
 /**
  * Express Security Middleware
@@ -36,7 +43,7 @@ app.use(express.urlencoded({ extended: true }));
  *   Online checker: http://cyh.herokuapp.com/cyh.
  */
 
-app.disable('x-powered-by');
+api.disable('x-powered-by');
 // app.use(helmet({
 //   contentSecurityPolicy: false,
 // }));
@@ -48,38 +55,33 @@ const allowedOrigins = [
   "https://premiersawards.gww.gov.bc.ca",
   "http://pa-app-node"
 ];
+const corsConfig = {
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg =
+        "The CORS policy for this site does not " +
+        "allow access from the specified origin: \n" + origin;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ['GET', 'POST'],
+  credentials: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
-app.use(cors({
-    origin: function(origin, callback) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          "The CORS policy for this site does not " +
-          "allow access from the specified origin: \n" + origin;
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    methods: ['GET', 'POST'],
-    credentials: true,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  })
-);
+frontend.use(cors(corsConfig));
+api.use(cors(corsConfig));
 
 // apply router middleware
 // - serve static frontend files
-app.use('/', indexRouter);
-console.log('Serving files at ', path.join(__dirname, 'views'));
-app.use('/', express.static(path.resolve(__dirname, 'views')));
+api.use('/', indexRouter);
 
-/**
- * Parse cookies to store JWT session tokens.
- */
-
-app.use(cookieParser(
+// parse cookies to store JWT session tokens.
+api.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
-
 
 // // initialize index router for API calls -> /api
 // indexRouter.use('/api', apiRouter);
@@ -96,13 +98,15 @@ app.use(cookieParser(
 //
 
 // handle generic errors
-app.use(globalHandler);
+api.use(globalHandler);
 
 // handle 404 errors
-app.use(notFoundHandler);
+api.use(notFoundHandler);
 
 // set port, listen for requests
-const PORT = process.env.API_PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+frontend.listen(3000, () => {
+  console.log(`Frontend server is running on port 3000.`);
+});
+api.listen(3001, () => {
+  console.log(`API server is running on port 3001.`);
 });
