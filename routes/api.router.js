@@ -11,11 +11,6 @@ router.use(function timeLog (req, res, next) {
   next();
 });
 
-// define the home page route
-router.get('/', function (req, res, next) {
-  res.send('No content')
-});
-
 // define nomination routes
 router.get('/data/view/:id', nominationController.get);
 router.get('/data/view/', nominationController.getAll);

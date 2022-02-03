@@ -83,8 +83,6 @@ indexRouter.use('/api', apiRouter);
 // Plug in the JWT strategy as a middleware so only verified users can access this route.
 indexRouter.use('/auth', secureRouter);
 
-app.use(config.baseUrl, indexRouter);
-
 // Serve static frontend files
 const path = __dirname + '/views/';
 // console.log('Serving files at ', path);
@@ -93,6 +91,8 @@ const path = __dirname + '/views/';
 indexRouter.get(config.baseUrl, function(req, res) {
   res.sendFile(path + "index.html");
 });
+
+app.use(config.baseUrl, indexRouter);
 
 // handle generic errors
 app.use(globalHandler);
