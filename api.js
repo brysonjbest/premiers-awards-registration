@@ -3,6 +3,7 @@
 const express = require('express');
 const history = require('connect-history-api-fallback');
 const app = express();
+const path = require('path');
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
 const config = require('./config.js');
@@ -66,6 +67,9 @@ app.use(cors({
 );
 
 // apply router middleware
+// - serve static frontend files
+console.log('Serving files at ', path.join(__dirname, 'views'));
+app.use(express.static(path.resolve(__dirname, 'views')));
 app.use('/', indexRouter);
 
 /**
@@ -84,10 +88,7 @@ app.use(cookieParser(
 // // Plug in the JWT strategy as a middleware so only verified users can access this route.
 // indexRouter.use('/auth', secureRouter);
 //
-// Serve static frontend files
-const path = __dirname + '/views/';
-console.log('Serving files at ', path);
-app.use('/static', express.static(path));
+
 //
 // indexRouter.get('/', function(req, res) {
 //   res.sendFile(path + "index.html");
