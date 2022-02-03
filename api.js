@@ -68,9 +68,9 @@ app.use(cors({
 
 // apply router middleware
 // - serve static frontend files
-console.log('Serving files at ', path.join(__dirname, 'views'));
-app.use(express.static(path.resolve(__dirname, 'views')));
 app.use('/', indexRouter);
+console.log('Serving files at ', path.join(__dirname, 'views'));
+app.use('/static', express.static(path.resolve(__dirname, 'views')));
 
 /**
  * Parse cookies to store JWT session tokens.
