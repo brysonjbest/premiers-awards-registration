@@ -17,9 +17,6 @@ app.use(history());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// get subdirectory for nominations
-const slug = '/nominations';
-
 /**
  * Express Security Middleware
  *
@@ -79,26 +76,31 @@ app.use(cookieParser(
 // time logging middleware
 indexRouter.use(function timeLog (req, res, next) {
   const d = new Date();
-  console.log('Request: ', req.path, d);
+  console.log('Request: ', req, d);
   next();
 });
 
-// initialize index router for API calls -> /api
-indexRouter.use('/api', apiRouter);
+indexRouter.get('/', function (req, res) {
+  res.send('Here!!');
+})
+// // initialize index router for API calls -> /api
+// indexRouter.use('/api', apiRouter);
+//
+// // Initialize authentication routes
+// // Plug in the JWT strategy as a middleware so only verified users can access this route.
+// indexRouter.use('/auth', secureRouter);
+//
+// // Serve static frontend files
+// const path = __dirname + '/views/';
+// // console.log('Serving files at ', path);
+// // app.use('/static', express.static(path));
+//
+// indexRouter.get('/', function(req, res) {
+//   res.sendFile(path + "index.html");
+// });
+//
 
-// Initialize authentication routes
-// Plug in the JWT strategy as a middleware so only verified users can access this route.
-indexRouter.use('/auth', secureRouter);
-
-// Serve static frontend files
-const path = __dirname + '/views/';
-// console.log('Serving files at ', path);
-// app.use('/static', express.static(path));
-
-indexRouter.get('/', function(req, res) {
-  res.sendFile(path + "index.html");
-});
-
+// apply router middleware
 app.use('/', indexRouter);
 
 // handle generic errors
