@@ -8,7 +8,6 @@
 const UserModel = require('../models/user');
 const {genToken} = require('../services/auth.services');
 
-
 /**
  * Get user profile
  *
@@ -21,6 +20,7 @@ const {genToken} = require('../services/auth.services');
 
 exports.get = async (req, res, next) => {
   try {
+
     const {email=''} = req.params || {};
 
     const user = await UserModel.findOne({ email: email }).exec();
@@ -121,10 +121,9 @@ exports.register = async (req, res, next) => {
  */
 
 exports.login = async (req, res, next) => {
-
   try {
 
-    // Find user with requested email
+    // check if user is an administrator
     const user = await UserModel.findOne({ email : req.body.email }).exec()
       .then(user => {
         if ( user === null || !user.validPassword(req.body.password) ) {

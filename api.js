@@ -9,7 +9,7 @@ const config = require('./config.js');
 const indexRouter = require('./routes/index.router');
 const dataRouter = require('./routes/data.router');
 const attachmentsRouter = require('./routes/attachments.router');
-const secureRouter = require('./routes/secure.router');
+const secureRouter = require('./routes/auth.router');
 const frontendRouter = require('./routes/frontend.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
@@ -36,6 +36,7 @@ const cookieParser = require('cookie-parser');
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "http://localhost:3002",
   "http://localhost",
   "https://premiersawards.gww.gov.bc.ca",
   "http://pa-app-node"
@@ -78,6 +79,11 @@ api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
 api.use(cors(corsConfig));
 
+// parse cookies to store JWT session tokens.
+api.use(cookieParser(
+  process.env.COOKIE_SECRET || 'testsecret'
+));
+
 // apply router middleware
 api.use('/', indexRouter);
 
@@ -88,13 +94,7 @@ indexRouter.use('/data', dataRouter);
 indexRouter.use('/attachments', attachmentsRouter);
 
 // Initialize router for authentication API calls
-// TODO: Plug in the JWT strategy as a middleware so only verified users can access this route.
 indexRouter.use('/auth', secureRouter);
-
-// parse cookies to store JWT session tokens.
-api.use(cookieParser(
-  process.env.COOKIE_SECRET || 'testsecret'
-));
 
 // handle generic errors
 api.use(globalHandler);

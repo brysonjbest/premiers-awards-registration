@@ -6,6 +6,7 @@
  */
 
 const jwt = require('jsonwebtoken');
+const axios = require('axios')
 
 'use strict';
 
@@ -22,26 +23,39 @@ const TOKEN_KEY = process.env.JWT_TOKEN_KEY || 'testtoken';
  * @src public
  */
 
-exports.authorize = async (req, res) => {
+exports.authorize = async (req, res, next) => {
 
-  // get current tokens
-  const { access_token=null } = req.signedCookies || {};
+  try {
+    // get current tokens
+    const {session = null, SMSESSION=''} = req.cookies || {};
+    console.log(session, SMSESSION)
+    // res.cookie("session", token, {httpOnly: true, secure: true, sameSite: 'strict', signed: true});
 
-  // test that tokens exist
-  if ( !access_token )
-    throw new Error('noToken');
+    // call SAML API - user data endpoint
+    let response = await axios.get('https://premiersawards.gww.gov.bc.ca/user_info', {
+      withCredentials: true
+    });
+    //console.log(response.data);
 
-  // validate token
-  const decoded = validate(access_token);
 
-  console.log(decoded)
+    // test that tokens exist
+    if (!session)
+      throw new Error('noToken');
 
-  // if invalid, try to refresh the token
-  if (!decoded) {
-    throw new Error('noAuth');
+    // validate token
+    const decoded = validate(session);
+
+    console.log(decoded)
+
+    // if invalid, try to refresh the token
+    if (!decoded) {
+      throw new Error('noAuth');
+    }
+
+    return decoded;
+  } catch (err) {
+    return next(err)
   }
-
-  return decoded;
 
 }
 
