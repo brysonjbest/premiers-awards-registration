@@ -28,14 +28,21 @@ exports.authorize = async (req, res, next) => {
   try {
     // get current tokens
     const {session = null, SMSESSION=''} = req.cookies || {};
-    console.log(session, SMSESSION)
+    let date = new Date();
+    const expDays = 1;
+    date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    const SMSCookie = "SMSESSION=" + SMSESSION + "; " + expires + "; path=/; HttpOnly; Secure=true;";
+    const SessionCookie = "session=" + session + "; " + expires + "; path=/; HttpOnly; Secure=true;";
     // res.cookie("session", token, {httpOnly: true, secure: true, sameSite: 'strict', signed: true});
 
     // call SAML API - user data endpoint
     let response = await axios.get('https://premiersawards.gww.gov.bc.ca/user_info', {
-      withCredentials: true
+      headers: {
+        'Cookie': `${SessionCookie} ${SMSCookie}`
+      }
     });
-    //console.log(response.data);
+    console.log(response.data);
 
 
     // test that tokens exist
