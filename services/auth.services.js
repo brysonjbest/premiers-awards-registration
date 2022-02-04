@@ -42,24 +42,15 @@ exports.authorize = async (req, res, next) => {
         'Cookie': `${SessionCookie} ${SMSCookie}`
       }
     });
-    console.log(response.data);
 
+    const {data = null} = response || {};
 
     // test that tokens exist
-    if (!session)
+    if (!data)
       throw new Error('noToken');
+    
+    return data;
 
-    // validate token
-    const decoded = validate(session);
-
-    console.log(decoded)
-
-    // if invalid, try to refresh the token
-    if (!decoded) {
-      throw new Error('noAuth');
-    }
-
-    return decoded;
   } catch (err) {
     return next(err)
   }

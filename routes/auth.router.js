@@ -11,12 +11,12 @@ router.use(function timeLog (req, res, next) {
 });
 
 // define authentication/user admin routes
-router.post('/register', authController.register);
+router.post('/register', authorize, authController.register);
 // router.post('/update/:id', authController.update);
 // router.post('/delete/:id', authController.remove);
-router.get('/view/:id', authController.get);
+router.get('/view/:id', authorize, authController.get);
 router.get('/login/', authorize, authController.login);
-router.post('/logout/', authController.logout);
+router.post('/logout/', authorize, authController.logout);
 // router.post('/refresh/', authController.refresh);
 
 module.exports = router;
