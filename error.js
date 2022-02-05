@@ -1,15 +1,9 @@
 /*!
- * MLP.API.Utilities.Error
+ * API error handlers
  * File: error.js
- * Copyright(c) 2021 Runtime Software Development Inc.
+ * Copyright(c) 2022 BC Gov
  * MIT Licensed
  */
-
-/**
- * Module dependencies.
- * @private
- */
-
 
 'use strict';
 

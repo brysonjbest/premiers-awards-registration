@@ -1,16 +1,18 @@
+/*!
+ * Frontend static file router
+ * File: frontend.router.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 const express = require('express')
 const router = express.Router()
 
-// middleware that is specific to this routes
-router.use(function timeLog (req, res, next) {
-  const d = new Date();
-  console.log('Request: ', req.path, d);
-  next();
-});
+/**
+ * Serve index page.
+ */
 
-// serve SPA index page
 router.get('/', function (req, res) {
     res.sendFile('/app/views/index.html');
 });
-
 module.exports = router;

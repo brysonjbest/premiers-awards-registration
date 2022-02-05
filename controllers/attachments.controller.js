@@ -1,9 +1,11 @@
-/**
- * Files (nomination attachments) controller
- *
- * **/
+/*!
+ * Nomination attachments controller
+ * File: attachments.controller.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
 
-const AttachmentModel = require('../models/attachment');
+const AttachmentModel = require('../models/attachment.model');
 const {deleteFile} = require('../services/files.services')
 
 /**

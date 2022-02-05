@@ -1,3 +1,10 @@
+/*!
+ * Nomination data db model
+ * File: nomination.model.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

@@ -1,15 +1,25 @@
-const express = require('express')
-const router = express.Router()
-const nominationController = require('../controllers/nominations.controller')
+/*!
+ * Nomination data controller
+ * File: user.controller.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
 
-// define nomination routes
-router.get('/view/:id', nominationController.get);
-router.get('/view/', nominationController.getAll);
-router.get('/user/:id', nominationController.getByUserID);
+const express = require('express');
+const router = express.Router();
+const nominationController = require('../controllers/data.controller');
+const {authorizeData, authorizeUser, authorizeAdmin} = require('../services/auth.services')
+
+/**
+ * Nomination data routes
+ */
+
+router.get('/view/:id', authorizeData, nominationController.get);
+router.get('/view/', authorizeAdmin, nominationController.getAll);
+router.get('/user/:guid', authorizeUser, nominationController.getByUserID);
 router.post('/create', nominationController.create);
-router.post('/update/:id', nominationController.update);
-router.post('/export/', nominationController.exporter);
-router.post('/submit/:id', nominationController.submit);
-router.get('/delete/:id', nominationController.delete);
-
+router.post('/update/:id', authorizeData, nominationController.update);
+router.post('/submit/:id', authorizeData, nominationController.submit);
+router.get('/delete/:id', authorizeData, nominationController.delete);
+router.post('/export/', authorizeAdmin, nominationController.exporter);
 module.exports = router;

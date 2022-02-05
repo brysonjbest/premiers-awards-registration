@@ -1,15 +1,18 @@
+/*!
+ * Index router
+ * File: index.router.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 const express = require('express')
 const router = express.Router()
 
-// middleware that is specific to this routes
-router.use(function timeLog (req, res, next) {
-  const d = new Date();
-  console.log('Request: ', req.path, d);
-  next();
-});
+/**
+ * Liveness/Readiness probe test router
+ */
 
 router.get('/', function (req, res) {
-  res.json('Here!!');
+  res.json('API is running.');
 });
-
 module.exports = router;

@@ -19,12 +19,12 @@
     "nodemon": "^2.0.4"
   },
   "license": "MIT",
-  "main": "api.js",
+  "main": "app.js",
   "name": "pa-app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node api.js",
-    "dev": "nodemon api.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "version": "1.0.0"
 }

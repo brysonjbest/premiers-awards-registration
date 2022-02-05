@@ -1,3 +1,10 @@
+/*!
+ * File processing services
+ * File: files.services.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const { promises: Fs } = require('fs');
@@ -77,14 +84,16 @@ exports.uploader = uploader.array('file', maxUploads);
  */
 
 const deleteFile = async function(filePath) {
-  return fs.stat(filePath, async (err, stat) => {
+  return fs.stat(filePath, async (err) => {
     if (err == null) {
       return await Fs.unlink(filePath);
-    } else if (err.code === 'ENOENT') {
+    }
+    else if (err.code === 'ENOENT') {
       // file does not exist (ignore)
       console.warn(err);
       return null;
-    } else {
+    }
+    else {
       throw err;
     }
   });
@@ -94,6 +103,7 @@ exports.deleteFile = deleteFile;
 
 /**
  * Generate a PDF document from JSON data
+ *
  * @param jsonData
  * @param dirPath
  * @param filename
@@ -121,9 +131,11 @@ exports.createPDF = createPDF;
 
 
 /**
- * Generate a zipped archive of folders paths
+ * Generate a zipped archive of folders paths.
+ *
  * @param filePaths
  * @param root
+ * @return {Buffer}
  */
 
 const createZIP = async function(filePaths, root) {
@@ -145,6 +157,7 @@ exports.createZIP = createZIP;
 
 /**
  * Convert Word document to PDF format
+ *
  * @param inputPath
  * @param outputPath
  */
@@ -166,8 +179,10 @@ exports.word2pdf = word2pdf;
 
 
 /**
- * Check if file path exists
+ * Check if file path exists.
+ *
  * @param filePath
+ * @return Boolean
  */
 
 const fileExists = async function (filePath) {

@@ -1,3 +1,10 @@
+/*!
+ * Premier's Awards Nomination web application (main)
+ * File: app.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 'use strict';
 
 const express = require('express');
@@ -5,14 +12,14 @@ const history = require('connect-history-api-fallback');
 const path = require('path');
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
-const config = require('./config.js');
 const indexRouter = require('./routes/index.router');
 const dataRouter = require('./routes/data.router');
 const attachmentsRouter = require('./routes/attachments.router');
-const secureRouter = require('./routes/auth.router');
+const secureRouter = require('./routes/user.router');
 const frontendRouter = require('./routes/frontend.router');
 const db = require('./db');
 const cookieParser = require('cookie-parser');
+const {authenticate} = require('./services/auth.services')
 // const helmet = require('helmet');
 
 /**
@@ -57,43 +64,50 @@ const corsConfig = {
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
-// create frontend app
+/**
+ * Frontend application (Vue) server
+ */
+
 const frontend = express();
 frontend.disable('x-powered-by');
 frontend.use(express.json());
 frontend.use(express.urlencoded({ extended: true }));
 frontend.use(cors(corsConfig));
 frontend.use(history());
-
-console.log('Serving frontend files at ', path.join(__dirname, 'views'));
 frontend.get('/', frontendRouter);
 frontend.use('/', express.static(path.join(__dirname, 'views')));
+console.log('Serving frontend files at ', path.join(__dirname, 'views'));
 
-// create API app
+/**
+ * API server
+ */
+
 const api = express();
 api.disable('x-powered-by');
-// app.use(helmet({
-//   contentSecurityPolicy: false,
-// }));
+// app.use(helmet({contentSecurityPolicy: false}));
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
 api.use(cors(corsConfig));
 
-// parse cookies to store JWT session tokens.
+// parse cookies to store session data
 api.use(cookieParser(
   process.env.COOKIE_SECRET || 'testsecret'
 ));
 
-// apply router middleware
+// log all requests
+api.use(function timeLog (req, res, next) {
+  const d = new Date();
+  console.log('Request: ', req.method, req.path, d);
+  next();
+});
+
+// authenticate user for all routes
+api.all('*', authenticate);
+
+// initialize routers for API calls
 api.use('/', indexRouter);
-
-// initialize router for nomination API calls
 indexRouter.use('/data', dataRouter);
-
-// initialize router for attachment API calls
 indexRouter.use('/attachments', attachmentsRouter);
-
-// Initialize router for authentication API calls
 indexRouter.use('/auth', secureRouter);
 
 // handle generic errors

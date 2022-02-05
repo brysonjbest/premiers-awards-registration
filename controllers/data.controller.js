@@ -1,10 +1,12 @@
-/**
- * Nomination controller
- *
- * **/
+/*!
+ * Nomination data controller
+ * File: data.controller.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
 
-const NominationModel = require('../models/nomination');
-const counter = require('../models/counter');
+const NominationModel = require('../models/nomination.model');
+const counter = require('../models/counter.model');
 const { createPDF, fileExists, createZIP } = require('../services/files.services');
 const path = require('path');
 const { Readable } = require('stream');
@@ -69,7 +71,7 @@ exports.getByUserID = async (req, res, next) => {
 
   try {
     // TODO: secure to only authenticated user nominations
-    const { id=null } = req.params || {};
+    const { guid=null } = req.params || {};
 
     // look up user by GUID
     // const user = await UserModel.findOne({guid: id});
@@ -77,7 +79,7 @@ exports.getByUserID = async (req, res, next) => {
     //   return next(Error('invalidInput'));
 
     // retrieve attached nominations
-    const nominations = await NominationModel.find({guid: id});
+    const nominations = await NominationModel.find({guid: guid});
 
     return res.status(200).json(nominations);
 
@@ -143,7 +145,6 @@ exports.create = async (req, res, next) => {
  */
 
 exports.update = async (req, res, next) => {
-
   try {
     let id = req.params.id;
     let data = req.body;
@@ -157,9 +158,10 @@ exports.update = async (req, res, next) => {
     if (nomination.submitted)
       return next(Error('alreadySubmitted'));
 
+    // mark as saved draft
     data.saved = true;
 
-    // update existing document in collection
+    // update existing nomination in collection
     const response = await NominationModel.updateOne({ _id: id }, data);
     res.status(200).json(response);
   } catch (err) {
@@ -243,7 +245,6 @@ exports.delete = async (req, res, next) => {
   }
 };
 
-
 /**
  * Export nomination data + attachments as compressed archive.
  *
@@ -294,7 +295,7 @@ exports.exporter = async (req, res, next) => {
 };
 
 /**
- * Download nomination file.
+ * Download nomination package as file.
  *
  * @param req
  * @param res

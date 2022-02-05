@@ -1,3 +1,10 @@
+/*!
+ * Database initialization
+ * File: db.js
+ * Copyright(c) 2022 BC Gov
+ * MIT Licensed
+ */
+
 const mongoose = require("mongoose");
 
 // Database configuration settings
@@ -6,12 +13,11 @@ const databaseHost = process.env.DATABASE_HOST || 'localhost';
 const databasePort = process.env.DATABASE_PORT || 27017;
 const databaseUser = process.env.DATABASE_USER || "root";
 const databasePassword = process.env.DATABASE_PASSWORD || "rootpassword";
-const databaseConnectionOpts = process.env.DATABASE_CONNECTION_OPTIONS || '';
+// const databaseConnectionOpts = process.env.DATABASE_CONNECTION_OPTIONS || '';
 const databaseName = process.env.DATABASE_NAME || 'premiersawards';
 
 // define database connection URI
 // const uri = `${protocol}${encodeURIComponent(databaseUser).trim()}:${encodeURIComponent(databasePassword).trim()}@${databaseHost}:${databasePort}/${databaseName}?${databaseConnectionOpts}`;
-
 
 // create db connection
 mongoose.connect(`${protocol}${databaseHost}:${databasePort}/${databaseName}`, {
