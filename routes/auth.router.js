@@ -3,6 +3,7 @@ const router = express.Router()
 const authController = require('../controllers/auth.controller')
 const { authorize } = require('../services/auth.services')
 
+
 // middleware that is specific to this routes
 router.use(function timeLog (req, res, next) {
   const d = new Date();

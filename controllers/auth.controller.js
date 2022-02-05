@@ -6,7 +6,7 @@
  */
 
 const UserModel = require('../models/user');
-const {genToken} = require('../services/auth.services');
+const {create} = require('../services/auth.services')
 
 /**
  * Get user profile
@@ -45,31 +45,9 @@ exports.get = async (req, res, next) => {
  */
 
 exports.register = async (req, res, next) => {
-
   try {
 
-    const { guid, firstname, lastname, email, password,  role } = req.body;
-
-    // Validate user input
-    if (!(guid && email && password && firstname && lastname && role)) {
-      throw new Error('invalidInput');
-    }
-
-    // validate if user exists in database
-    const existingUser = await UserModel.findOne({ email: email });
-    if (existingUser) {
-      throw new Error('userExists');
-    }
-
-    // Create user in our database
-    const user = await UserModel.create({
-      guid,
-      firstname,
-      lastname,
-      email: email.toLowerCase(), // sanitize: convert email to lowercase
-      password: password,
-      role
-    });
+    const user = await create(req.body);
 
     // return new user
     res.status(201).json(user);
@@ -77,7 +55,6 @@ exports.register = async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
-
 };
 
 /**
@@ -191,17 +168,3 @@ exports.logout = async (req, res, next) => {
   }
 
 };
-
-/**
- * Refresh user token.
- *
- * @param req
- * @param res
- * @param {Function} next
- * @method get
- * @src public
- */
-
-// export const refresh = async (req, res, next) => {
-//
-// };

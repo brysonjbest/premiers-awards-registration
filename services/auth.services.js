@@ -5,12 +5,10 @@
  * MIT Licensed
  */
 
-const jwt = require('jsonwebtoken');
 const axios = require('axios')
+const UserModel = require('../models/user')
 
 'use strict';
-
-const TOKEN_KEY = process.env.JWT_TOKEN_KEY || 'testtoken';
 
 /**
  * Authorize user access based on permissions set for user role.
@@ -59,38 +57,58 @@ exports.authorize = async (req, res, next) => {
 
 
 /**
- * Validate access token in session cookie with KeyCloak server.
+ * Create admin user
  *
  * @public
  * @return {String} JSON web token
- * @param token
  */
 
-const validate = async (token) => {
+const createUser = async (userData) => {
 
-  // stop verification if no token found
-  if (!token) return null;
+  const {
+    guid='',
+    username='',
+    firstname='',
+    lastname='',
+    email='',
+    password='',
+    role='nominator'
+  } = userData || {};
 
-  return jwt.verify(token, TOKEN_KEY);
+  // TODO: validate user data here
+
+  // Validate user input
+  if (!(guid && username && role)) {
+    throw new Error('invalidInput');
+  }
+
+  // validate if user exists in database
+  const existingUser = await UserModel.findOne({ guid: guid });
+  if (existingUser) {
+    throw new Error('userExists');
+  }
+
+  // Create user in our database
+  return await UserModel.create({
+    guid: guid,
+    username: username,
+    firstname: firstname,
+    lastname: lastname,
+    email: email.toLowerCase(),
+    role: role,
+    password: password,
+    hash: '',
+    salt: ''
+  });
 
 }
-exports.validate = validate;
+exports.create = createUser;
 
 
-/**
- * Generate JWT token
- *
- * @public
- * @param {Object} user data
- * @return access_token
- */
+// initialize super-administrator
+createUser({
+  guid: process.env.ADMIN_GUID || 'test_admin_guid',
+  username: process.env.ADMIN_ID || 'test_admin',
+  role: 'super-administrator'
+});
 
-exports.genToken = (user) => {
-  return jwt.sign(
-    {user_id: user._id, email: user.email},
-    process.env.TOKEN_KEY || TOKEN_KEY,
-    {
-      expiresIn: "2h",
-    }
-  );
-}
