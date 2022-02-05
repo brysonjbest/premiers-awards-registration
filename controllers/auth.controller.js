@@ -126,19 +126,18 @@ exports.login = async (req, res, next) => {
     if (!res.locals.user)
       return next(new Error('noAuth'))
 
-    console.log(res.locals.user)
-
-    const { guid=null } = res.locals.user;
+    const { SMGOV_GUID=null, username=null } = res.locals.user;
 
     // check if user is an administrator
-    const adminUser = await UserModel.findOne({ guid : guid }) || {};
+    const adminUser = await UserModel.findOne({ guid : SMGOV_GUID }) || {};
     const {email='', role='nominator', firstname='', lastname=''} = adminUser || {};
 
     // successful login
     res.status(200).json({
         message: {msg: 'Login successful!', type: 'success'},
         user: {
-          guid: guid,
+          guid: SMGOV_GUID,
+          username: username,
           email: email,
           role: role,
           firstname: firstname,
