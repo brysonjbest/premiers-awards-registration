@@ -128,6 +128,8 @@ exports.login = async (req, res, next) => {
 
     const { SMGOV_GUID=null, username=null } = res.locals.user;
 
+    console.log('Logging in:', SMGOV_GUID, username)
+
     // check if user is an administrator
     const adminUser = await UserModel.findOne({ guid : SMGOV_GUID }) || {};
     const {email='', role='nominator', firstname='', lastname=''} = adminUser || {};
