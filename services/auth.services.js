@@ -44,19 +44,25 @@ exports.authenticate = async (req, res, next) => {
       }
     });
     const {data = null} = response || {};
-    const {guid=''} = data || {};
+    const { SMGOV_GUID=[null], username=[null] } = data;
 
     // test that tokens exist
     if (!data)
       return next(new Error('noAuth'));
 
-    // check if user is an administrator
-    const userData = await UserModel.findOne({guid: guid});
+    // reformat user data
+    const userData = {
+      guid: SMGOV_GUID[0],
+      username: username[0]
+    };
 
-    console.log(data, userData)
+    // check if user is an administrator
+    const adminUserData = await UserModel.findOne({guid: userData.guid});
+
+    console.log(userData, adminUserData)
 
     // store user data in response for downstream middleware
-    res.locals.user = userData || data;
+    res.locals.user = adminUserData || userData;
     return next();
 
   } catch (err) {
