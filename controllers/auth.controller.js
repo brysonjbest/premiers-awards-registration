@@ -126,7 +126,7 @@ exports.login = async (req, res, next) => {
     if (!res.locals.user)
       return next(new Error('noAuth'))
 
-    const { SMGOV_GUID=null, username=null } = res.locals.user;
+    const { SMGOV_GUID=[null], username=[null] } = res.locals.user;
 
     console.log('Logging in:', SMGOV_GUID, username)
 
@@ -138,8 +138,8 @@ exports.login = async (req, res, next) => {
     res.status(200).json({
         message: {msg: 'Login successful!', type: 'success'},
         user: {
-          guid: SMGOV_GUID,
-          username: username,
+          guid: SMGOV_GUID[0],
+          username: username[0],
           email: email,
           role: role,
           firstname: firstname,
