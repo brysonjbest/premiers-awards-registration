@@ -123,33 +123,26 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
 
+    if (!res.locals.user)
+      return next(new Error('noAuth'))
+
+    console.log(res.locals.user)
+
+    const { guid=null } = res.locals.user;
+
     // check if user is an administrator
-    const user = await UserModel.findOne({ email : req.body.email }).exec()
-      .then(user => {
-        if ( user === null || !user.validPassword(req.body.password) ) {
-          throw new Error('invalidCredentials');
-        }
-        return user;
-      });
-
-    console.log(user)
-
-    // Create token
-    const token = genToken(user);
-
-    // send access token to the client inside a cookie
-    // TODO: include secure: true on production site
-    res.cookie("access_token", token, {httpOnly: true, sameSite: 'strict', signed: true});
+    const adminUser = await UserModel.findOne({ guid : guid }) || {};
+    const {email='', role='nominator', firstname='', lastname=''} = adminUser || {};
 
     // successful login
     res.status(200).json({
         message: {msg: 'Login successful!', type: 'success'},
         user: {
-          guid: user.guid,
-          email: user.email,
-          role: user.role,
-          firstname: user.firstname,
-          lastname: user.lastname
+          guid: guid,
+          email: email,
+          role: role,
+          firstname: firstname,
+          lastname: lastname
         }}
     );
   }

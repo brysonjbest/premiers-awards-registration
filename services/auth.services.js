@@ -26,7 +26,7 @@ const TOKEN_KEY = process.env.JWT_TOKEN_KEY || 'testtoken';
 exports.authorize = async (req, res, next) => {
 
   try {
-    // get current tokens
+    // get current user data (if authenticated)
     const {session = null, SMSESSION=''} = req.cookies || {};
     let date = new Date();
     const expDays = 1;
@@ -42,14 +42,14 @@ exports.authorize = async (req, res, next) => {
         'Cookie': `${SessionCookie} ${SMSCookie}`
       }
     });
-
     const {data = null} = response || {};
 
     // test that tokens exist
     if (!data)
-      throw new Error('noToken');
-    
-    return data;
+      return next(new Error('noAuth'))
+
+    res.locals.user = data;
+    return next();
 
   } catch (err) {
     return next(err)
