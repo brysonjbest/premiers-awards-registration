@@ -43,11 +43,11 @@ exports.authenticate = async (req, res, next) => {
         'Cookie': `${SessionCookie} ${SMSCookie}`
       }
     });
-    const {data = null} = response || {};
-    const { SMGOV_GUID=[null], username=[null] } = data;
+    const {data = {}} = response || {};
+    const { SMGOV_GUID=[null], username=[null] } = data || {};
 
     // test that tokens exist
-    if (!data)
+    if (!data || !SMGOV_GUID[0] || !username[0])
       return next(new Error('noAuth'));
 
     // reformat user data
@@ -166,6 +166,7 @@ exports.authorizeUser = async (req, res, next) => {
  */
 
 exports.authorizeAdmin = async (req, res, next) => {
+  console.log(res.locals.user)
   if (res.locals.user.role === 'administrator'
     || res.locals.user.role === 'super-administrator') {
     next();

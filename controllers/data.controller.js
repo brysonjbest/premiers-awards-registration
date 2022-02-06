@@ -24,13 +24,10 @@ const maxNumberOfDrafts = 10;
  */
 
 exports.get = async (req, res, next) => {
-
   try {
     const { id=null } = req.params || {};
     const nomination = await NominationModel.findById(id);
-
     return res.status(200).json(nomination);
-
   } catch (err) {
     console.error(err)
     return next(err);
@@ -47,11 +44,9 @@ exports.get = async (req, res, next) => {
  */
 
 exports.getAll = async (req, res, next) => {
-
   try {
     const nominations = await NominationModel.find({});
     return res.status(200).json(nominations);
-
   } catch (err) {
     console.error(err)
     return next(err);
@@ -60,6 +55,7 @@ exports.getAll = async (req, res, next) => {
 
 /**
  * Get nomination data for user.
+ * - assumes authorization middleware
  *
  * @param req
  * @param res
@@ -68,9 +64,7 @@ exports.getAll = async (req, res, next) => {
  */
 
 exports.getByUserID = async (req, res, next) => {
-
   try {
-    // TODO: secure to only authenticated user nominations
     const { guid=null } = req.params || {};
 
     // look up user by GUID
@@ -80,9 +74,7 @@ exports.getByUserID = async (req, res, next) => {
 
     // retrieve attached nominations
     const nominations = await NominationModel.find({guid: guid});
-
     return res.status(200).json(nominations);
-
   } catch (err) {
     console.error(err)
     return next(err);
