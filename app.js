@@ -108,7 +108,7 @@ api.all('*', authenticate);
 api.use('/', indexRouter);
 indexRouter.use('/data', dataRouter);
 indexRouter.use('/attachments', attachmentsRouter);
-indexRouter.use('/auth', secureRouter);
+indexRouter.use('/users', secureRouter);
 
 // handle generic errors
 api.use(globalHandler);

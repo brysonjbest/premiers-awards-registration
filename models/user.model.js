@@ -13,31 +13,32 @@ const Schema = mongoose.Schema;
  */
 
 const UserSchema = new Schema({
-  guid: {
-    type: String,
-    required: true,
-    unique: true
+    guid: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    firstname: {
+      type: String,
+    },
+    lastname: {
+      type: String,
+    },
+    email: {
+      type: String,
+    },
+    role: {
+      type: String,
+      enum: ['administrator', 'super-administrator'],
+      required: true,
+    }
   },
-  username: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  firstname: {
-    type: String,
-  },
-  lastname: {
-    type: String,
-  },
-  email: {
-    type: String,
-  },
-  role: {
-    type: String,
-    enum: ['administrator', 'super-administrator'],
-    required: true,
-  }
-});
+  { timestamps: true });
 
 const UserModel = mongoose.model('User', UserSchema, 'users');
 module.exports = UserModel;

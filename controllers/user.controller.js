@@ -75,14 +75,10 @@ exports.info = async (req, res, next) => {
  */
 
 exports.get = async (req, res, next) => {
-
   try {
-
     const { guid=null } = req.params || {};
-
-    const users = await UserModel.find({guid: guid});
+    const users = await UserModel.findOne({guid: guid});
     return res.status(200).json(users);
-
   } catch (err) {
     console.error(err)
     return next(err);
@@ -99,7 +95,6 @@ exports.get = async (req, res, next) => {
  */
 
 exports.getAll = async (req, res, next) => {
-
   try {
     const users = await UserModel.find({});
     return res.status(200).json(users);
@@ -122,16 +117,16 @@ exports.getAll = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
   try {
-    let id = req.params.id;
+    let guid = req.params.guid;
     let data = req.body;
 
     // look up user
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOne({guid: guid});
     if (!user)
       return next(Error('noRecord'));
 
     // update user data in collection
-    const response = await UserModel.updateOne({ _id: id }, data);
+    const response = await UserModel.updateOne({ _id: user.id }, data);
     res.status(200).json(response);
 
   } catch (err) {

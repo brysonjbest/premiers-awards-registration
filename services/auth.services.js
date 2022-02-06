@@ -25,8 +25,13 @@ const proxyURL = 'https://premiersawards.gww.gov.bc.ca';
  */
 
 exports.authenticate = async (req, res, next) => {
-
   try {
+    // skip authentication if in test env
+    if (process.env.NODE_ENV !== 'production') {
+      res.locals.user = await UserModel.findOne({guid: 'test_admin_guid'});
+      return next();
+    }
+
     // get current user data (if authenticated)
     const {session = null, SMSESSION=''} = req.cookies || {};
     let date = new Date();
@@ -47,7 +52,7 @@ exports.authenticate = async (req, res, next) => {
     const { SMGOV_GUID=[null], username=[null] } = data || {};
 
     // test that tokens exist
-    if (!data || !SMGOV_GUID[0] || !username[0])
+    if ( !data || !SMGOV_GUID[0] || !username[0] )
       return next(new Error('noAuth'));
 
     // reformat user data
