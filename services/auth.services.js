@@ -147,11 +147,11 @@ exports.authorizeAttachment = async (req, res, next) => {
 
 exports.authorizeUser = async (req, res, next) => {
   try {
+    if (!res.locals.user) return next(new Error('noAuth'));
+    const {role=''} = res.locals.user || {};
     const {guid = null} = req.params || {};
     if (
-      res.locals.user.guid === guid
-      || res.locals.user.role === 'administrator'
-      || res.locals.user.role === 'super-administrator') {
+      res.locals.user.guid === guid || role === 'administrator' || role === 'super-administrator') {
       return next();
     }
     else {
@@ -172,9 +172,9 @@ exports.authorizeUser = async (req, res, next) => {
  */
 
 exports.authorizeAdmin = async (req, res, next) => {
-  console.log(res.locals.user)
-  if (res.locals.user.role === 'administrator'
-    || res.locals.user.role === 'super-administrator') {
+  if (!res.locals.user) return next(new Error('noAuth'));
+  const {role=''} = res.locals.user || {};
+  if (role === 'administrator' || role === 'super-administrator') {
     next();
   }
   else {
@@ -182,8 +182,9 @@ exports.authorizeAdmin = async (req, res, next) => {
   }
 }
 exports.authorizeSuperAdmin = async (req, res, next) => {
-  console.log(res.locals.user.role)
-  if (res.locals.user.role === 'super-administrator') {
+  if (!res.locals.user) return next(new Error('noAuth'));
+  const {role=''} = res.locals.user || {};
+  if (role === 'super-administrator') {
     next();
   }
   else {

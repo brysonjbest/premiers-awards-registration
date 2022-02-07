@@ -148,16 +148,16 @@ exports.update = async (req, res, next) => {
 exports.remove = async (req, res, next) => {
   try {
 
-    // get requested nomination ID
-    let id = req.params.id;
+    // get requested user GUID
+    let guid = req.params.guid;
 
     // look up user
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOne({guid: guid});
     if (!user)
       return next(Error('noRecord'));
 
-    // delete nomination
-    const response = await UserModel.deleteOne({_id: id})
+    // delete user data from collection
+    const response = await UserModel.deleteOne({guid: guid})
 
     res.status(200).json(response);
 

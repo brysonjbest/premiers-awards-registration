@@ -66,13 +66,7 @@ exports.getAll = async (req, res, next) => {
 exports.getByUserID = async (req, res, next) => {
   try {
     const { guid=null } = req.params || {};
-
-    // look up user by GUID
-    // const user = await UserModel.findOne({guid: id});
-    // if (!user)
-    //   return next(Error('invalidInput'));
-
-    // retrieve attached nominations
+    // retrieve nominations for GUID
     const nominations = await NominationModel.find({guid: guid});
     return res.status(200).json(nominations);
   } catch (err) {
