@@ -156,6 +156,10 @@ exports.remove = async (req, res, next) => {
     if (!user)
       return next(Error('noRecord'));
 
+    // ensure user not deleting themselves
+    if ( res.locals.user.guid === guid )
+      return next(Error('invalidInput'));
+
     // delete user data from collection
     const response = await UserModel.deleteOne({guid: guid})
 
