@@ -122,4 +122,5 @@ frontend.listen(3000, () => {
 });
 api.listen(3001, () => {
   console.log(`API server is running on port 3001.`);
+  console.log(`Run mode: ${process.env.NODE_ENV}`)
 });
