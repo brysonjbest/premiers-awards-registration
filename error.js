@@ -44,6 +44,12 @@ const errors = {
     status: 422,
     type: 'error'
   },
+  recordExists: {
+    hint: 'Collection document already exists in database.',
+    msg: 'Document already exists in collection.',
+    status: 422,
+    type: 'error'
+  },
   userExists: {
     hint: 'User already exists in database.',
     msg: 'User already exists. Please login.',

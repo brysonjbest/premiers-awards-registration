@@ -52,7 +52,6 @@ exports.authenticate = async (req, res, next) => {
     const { SMGOV_GUID=[null], username=[null] } = data || {};
 
     // test that tokens exist
-    console.log(data)
     if ( !data || !SMGOV_GUID[0] || !username[0] )
       return next(new Error('noAuth'));
 
@@ -64,8 +63,6 @@ exports.authenticate = async (req, res, next) => {
 
     // check if user is an administrator
     const adminUserData = await UserModel.findOne({guid: userData.guid});
-
-    console.log(userData, adminUserData)
 
     // store user data in response for downstream middleware
     res.locals.user = adminUserData || userData;

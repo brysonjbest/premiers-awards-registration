@@ -13,6 +13,7 @@ const path = require('path');
 const cors = require('cors');
 const {notFoundHandler, globalHandler} = require('./error');
 const indexRouter = require('./routes/index.router');
+const settingsRouter = require('./routes/settings.router');
 const dataRouter = require('./routes/data.router');
 const attachmentsRouter = require('./routes/attachments.router');
 const secureRouter = require('./routes/user.router');
@@ -106,6 +107,7 @@ api.all('*', authenticate);
 
 // initialize routers for API calls
 api.use('/', indexRouter);
+indexRouter.use('/settings', settingsRouter);
 indexRouter.use('/data', dataRouter);
 indexRouter.use('/attachments', attachmentsRouter);
 indexRouter.use('/users', secureRouter);

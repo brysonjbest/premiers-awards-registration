@@ -6,6 +6,7 @@
  */
 
 const AttachmentModel = require('../models/attachment.model');
+const NominationModel = require('../models/nomination.model');
 const {deleteFile} = require('../services/files.services')
 
 /**
@@ -45,14 +46,12 @@ exports.upload = async (req, res, next) => {
     const { files=[] } = req || {};
 
     // get existing attachments for nomination
-    const currentAttachmentIDs = await AttachmentModel.find({ nomination: id }).distinct('_id');
-
-    console.log('Current files: ', currentAttachmentIDs, 'New files', files)
+    // const currentAttachmentIDs = await AttachmentModel.find({ nomination: id }).distinct('_id');
 
     // reject updates to submitted nominations
-    // const nomination = await NominationModel.findById(id);
-    // if (nomination.submitted)
-    //   return next(Error('alreadySubmitted'));
+    const nomination = await NominationModel.findById(id);
+    if (nomination.submitted)
+      return next(Error('alreadySubmitted'));
 
     // update attachment metadata
     // - file object includes multer metadata
@@ -65,7 +64,7 @@ exports.upload = async (req, res, next) => {
       }
     });
 
-    // update existing document in collection
+    // update existing attachment document in collection
     const response = await Promise.all(
       attachmentData.map(attachment => {
         // create new attachment if no ID

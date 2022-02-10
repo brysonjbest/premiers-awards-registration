@@ -6,12 +6,12 @@
  */
 
 const NominationModel = require('../models/nomination.model');
+const AttachmentModel = require('../models/attachment.model');
 const counter = require('../models/counter.model');
-const { createPDF, fileExists, createZIP } = require('../services/files.services');
-const path = require('path');
+const { fileExists, createZIP, createCSV } = require('../services/files.services');
+const { generateNominationPDF } = require('../services/pdf.services');
 const { Readable } = require('stream');
 
-const dataPath = process.env.DATA_PATH || '/Users/sprose/Workspace/Docker/pa-app/data/'
 const maxNumberOfDrafts = 10;
 
 /**
@@ -170,27 +170,59 @@ exports.submit = async (req, res, next) => {
   try {
     let id = req.params.id;
     let data = req.body;
-    const { year='' } = data || {}
-    const isAdmin = true;
+    const { year='' } = data || {};
 
     // look up nomination exists
     const nomination = await NominationModel.findById(id);
     if (!nomination || !year)
       return next(new Error('invalidInput'));
 
-    // generate downloadable PDF version
-    const filename = `${id}.pdf`;
-    const generatedPath = path.join(dataPath, 'generated', String(year));
-    await createPDF(nomination, generatedPath, filename, console.log);
-
     // reject updates to submitted nominations
-    if (nomination.submitted && !isAdmin)
+    if (nomination.submitted)
       return next(Error('alreadySubmitted'));
+
+    // lookup attachments
+    data.attachments = await AttachmentModel.find({nomination: id});
+
+    // generate downloadable PDF version
+    data.filePath = await generateNominationPDF(data, next);
 
     // update submission status
     data.submitted = true;
 
     // submit nomination document as completed
+    await NominationModel.updateOne({ _id: id }, data);
+
+    res.status(200).json(data);
+
+  } catch (err) {
+    return next(err);
+  }
+
+};
+
+/**
+ * Revert submitted nomination to draft
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @src public
+ */
+
+exports.unsubmit = async (req, res, next) => {
+  try {
+    let id = req.params.id;
+
+    // look up nomination exists
+    const nomination = await NominationModel.findById(id);
+    if (!nomination)
+      return next(new Error('invalidInput'));
+
+    // update submission status
+    const data = { submitted: false };
+
+    // update nomination document
     await NominationModel.updateOne({ _id: id }, data);
 
     res.status(200).json(data);
@@ -221,7 +253,6 @@ exports.delete = async (req, res, next) => {
     if (!nomination)
       return next(Error('noRecord'));
 
-    // delete nomination
     const response = await NominationModel.deleteOne({_id: id})
 
     res.status(200).json(response);
@@ -243,18 +274,39 @@ exports.delete = async (req, res, next) => {
 exports.exporter = async (req, res, next) => {
   try {
 
+    // get requested format type
+    let { format='pdf' } = req.params || [];
+
     // retrieve nomination IDs
     let { ids = [], year='' } = req.body || [];
 
     // ensure nominations IDs are valid
-    if ( ids.filter(id => { return NominationModel.findById(id) }).length !== ids.length )
+    const nominations = await NominationModel.find({'_id': { $in: ids }});
+    if ( nominations.length !== ids.length )
       return next(new Error('InvalidInput'));
 
-    // generate zipped archive of retrieved data
-    const zipRoot = 'nomination_package';
-    const data = await createZIP(ids.map(id => {
-      return path.join(dataPath, 'generated', String(year), `${id}.pdf`);
-    }), zipRoot);
+    // handle exporting for requested format
+    // - generate zipped archive of retrieved data
+    // - PDF
+    // - CSV
+    const exportHandlers = {
+      pdf: async () => {
+        // bundle PDF versions in compressed folder
+        const zipRoot = 'nomination_package';
+        const zipEntries = nominations.map(nomination => {
+          const { filePath='' } = nomination || {};
+          return filePath;
+        });
+        return await createZIP(zipEntries, zipRoot);
+      },
+      csv: async () => {
+        // convert JSON to CSV data format
+        return await createCSV(nominations);
+      }
+    }
+    const data = exportHandlers.hasOwnProperty(format)
+      ? await exportHandlers[format]()
+      : null;
 
     // create data stream and pipe to response
     res.on('error', (err) => {
@@ -298,8 +350,6 @@ exports.download = async (req, res, next) => {
     // check that file exists
     if (!await fileExists(filePath))
       return next(new Error('MissingFile'));
-
-    // lookup correct file name
 
     res.download(filePath, 'download.pdf', function (err) {
       if (err) {

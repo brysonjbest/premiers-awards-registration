@@ -68,6 +68,9 @@ const NominationSchema = new Schema(
       type: Boolean,
       required: true
     },
+    filePath: {
+      type: String
+    },
     organization: {
       type: String,
       required: function() { return this.submitted }

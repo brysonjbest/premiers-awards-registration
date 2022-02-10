@@ -20,6 +20,7 @@ router.get('/user/:guid', authorizeUser, nominationController.getByUserID);
 router.post('/create', nominationController.create);
 router.post('/update/:id', authorizeData, nominationController.update);
 router.post('/submit/:id', authorizeData, nominationController.submit);
+router.get('/unsubmit/:id', authorizeAdmin, nominationController.unsubmit);
 router.get('/delete/:id', authorizeData, nominationController.delete);
-router.post('/export/', authorizeAdmin, nominationController.exporter);
+router.post('/export/:format', authorizeAdmin, nominationController.exporter);
 module.exports = router;
