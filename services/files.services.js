@@ -10,8 +10,6 @@ const { promises: Fs } = require('fs');
 const path = require('path');
 const AdmZip = require("adm-zip");
 const multer = require('multer');
-const libre = require('libreoffice-convert');
-libre.convertAsync = require('util').promisify(libre.convert);
 
 const dataPath = process.env.DATA_PATH || '/Users/sprose/Workspace/Docker/pa-app/data/'
 const maxUploads = 5;
