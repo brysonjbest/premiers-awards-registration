@@ -16,6 +16,8 @@ const schemaData = {
     {value: 'submitted', text: 'Submitted'}
   ],
   "roles": [
+    {value: 'inactive', text: 'Inactive'},
+    {value: 'nominator', text: 'Nominator'},
     {value: 'administrator', text: 'Administrator'},
     {value: 'super-administrator', text: 'Super-Administrator'}
   ],

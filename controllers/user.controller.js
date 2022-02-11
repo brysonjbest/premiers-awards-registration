@@ -20,28 +20,76 @@ const auth = require('../services/auth.services');
 
 exports.register = async (req, res, next) => {
   try {
-
     const {
-      role='',
       guid='',
       username='',
       firstname='',
       lastname='',
       email=''
     } = req.body || {};
-
+    // ensure role is set to 'inactive' for non-activated users
     const user = await auth.create({
-      role: role,
+      role: 'inactive',
       guid: guid,
       username: username,
       firstname: firstname,
       lastname: lastname,
       email: email
     });
+    res.status(201).json(user);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+/**
+ * Activate registered nominator
+ *
+ * @param req
+ * @param res
+ * @param {Function} next
+ * @method post
+ * @src public
+ */
+
+exports.activate = async (req, res, next) => {
+  try {
+    const { guid=null } = req.params || {};
+    const user = await UserModel.findOne({guid: guid});
+    if (!user)
+      return next(Error('noRecord'));
+
+    // update user role to nominator
+    const response = await UserModel.updateOne({guid: guid}, {role: 'nominator'});
 
     // return new user
-    res.status(201).json(user);
+    res.status(201).json(response);
 
+  } catch (err) {
+    return next(err);
+  }
+};
+
+/**
+ * Assign registered user new role
+ *
+ * @param req
+ * @param res
+ * @param {Function} next
+ * @method post
+ * @src public
+ */
+
+exports.assign = async (req, res, next) => {
+  try {
+    const { guid=null } = req.params || {};
+    const { role=null } = req.body || {};
+    const user = await UserModel.findOne({guid: guid});
+    if (!user)
+      return next(Error('noRecord'));
+    // update user role
+    const response = await UserModel.updateOne({guid: guid}, {role: role});
+    res.status(201).json(response);
   } catch (err) {
     return next(err);
   }
@@ -77,8 +125,8 @@ exports.info = async (req, res, next) => {
 exports.get = async (req, res, next) => {
   try {
     const { guid=null } = req.params || {};
-    const users = await UserModel.findOne({guid: guid});
-    return res.status(200).json(users);
+    const user = await UserModel.findOne({guid: guid});
+    return res.status(200).json(user);
   } catch (err) {
     console.error(err)
     return next(err);
@@ -198,7 +246,7 @@ exports.login = async (req, res, next) => {
 
     // check if user is an administrator
     const adminUser = await UserModel.findOne({ guid : guid }) || {};
-    const {email='', role='nominator', firstname='', lastname=''} = adminUser || {};
+    const {email='', role='', firstname='', lastname=''} = adminUser || {};
 
     // successful login
     res.status(200).json({

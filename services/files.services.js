@@ -11,7 +11,7 @@ const path = require('path');
 const AdmZip = require("adm-zip");
 const multer = require('multer');
 
-const dataPath = process.env.DATA_PATH || '/Users/sprose/Workspace/Docker/pa-app/data/'
+const dataPath = process.env.DATA_PATH
 const maxUploads = 5;
 const acceptedMIMETypes = [
   'application/pdf',
