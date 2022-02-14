@@ -11,6 +11,7 @@ const counter = require('../models/counter.model');
 const { fileExists, createZIP, createCSV } = require('../services/files.services');
 const { generateNominationPDF } = require('../services/pdf.services');
 const { Readable } = require('stream');
+const {validateYear} = require('../services/validation.services')
 
 const maxNumberOfDrafts = 10;
 
@@ -174,7 +175,7 @@ exports.submit = async (req, res, next) => {
 
     // look up nomination exists
     const nomination = await NominationModel.findById(id);
-    if (!nomination || !year)
+    if ( !nomination || !year || !validateYear(year) )
       return next(new Error('invalidInput'));
 
     // reject updates to submitted nominations
@@ -279,6 +280,8 @@ exports.exporter = async (req, res, next) => {
 
     // retrieve nomination IDs
     let { ids = [], year='' } = req.body || [];
+
+    if (!validateYear(year)) return next(Error('invalidInput'));
 
     // ensure nominations IDs are valid
     const nominations = await NominationModel.find({'_id': { $in: ids }});

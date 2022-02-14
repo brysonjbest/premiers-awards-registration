@@ -61,3 +61,12 @@ exports.validatePhone = (phone) => {
       /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4}$/im
     );
 };
+
+/**
+ * Validate year
+ * TODO: make the year modifiable
+ * **/
+
+exports.validateYear = (year) => {
+  return parseInt(year) === 2022
+};

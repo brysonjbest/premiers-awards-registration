@@ -19,6 +19,7 @@ const attachmentsRouter = require('./routes/attachments.router');
 const secureRouter = require('./routes/user.router');
 const frontendRouter = require('./routes/frontend.router');
 const db = require('./db');
+const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
 const {authenticate} = require('./services/auth.services')
 // const helmet = require('helmet');
@@ -41,14 +42,15 @@ const {authenticate} = require('./services/auth.services')
  *   Online checker: http://cyh.herokuapp.com/cyh.
  */
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:3001",
-  "http://localhost:3002",
-  "http://localhost",
-  "https://premiersawards.gww.gov.bc.ca",
-  "http://pa-app-node"
-];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? ["https://premiersawards.gww.gov.bc.ca", "http://pa-app-node"]
+    : [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost",
+    ];
+
 const corsConfig = {
   origin: function(origin, callback) {
     if (!origin) return callback(null, true);
@@ -111,6 +113,9 @@ indexRouter.use('/settings', settingsRouter);
 indexRouter.use('/data', dataRouter);
 indexRouter.use('/attachments', attachmentsRouter);
 indexRouter.use('/users', secureRouter);
+
+// sanitize db keys to prevent injection
+api.use(mongoSanitize());
 
 // handle generic errors
 api.use(globalHandler);
