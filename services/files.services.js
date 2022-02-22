@@ -13,11 +13,7 @@ const multer = require('multer');
 
 const dataPath = process.env.DATA_PATH
 const maxUploads = 5;
-const acceptedMIMETypes = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-];
+const acceptedMIMETypes = ['application/pdf'];
 
 /**
  * File uploader middleware (multer)

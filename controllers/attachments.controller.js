@@ -59,8 +59,8 @@ exports.upload = async (req, res, next) => {
       return {
         nomination: id,
         file: file,
-        label: metadata.label[index] || '',
-        description: metadata.description[index] || ''
+        label: Array.isArray(metadata.label) ? metadata.label[index] : metadata.label || '',
+        description: Array.isArray(metadata.description) ? metadata.description[index] : metadata.description || '',
       }
     });
 
