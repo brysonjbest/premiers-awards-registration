@@ -138,7 +138,7 @@ const generateNominationPDF = async function(jsonData, callback) {
       const {type = '', firstname = '', lastname = '', organization=''} = nominee || {};
       doc.fontSize(12);
       doc.font('Helvetica').text(
-        `${isMultiple ? schemaServices.lookup('nomineeTypes', type) + ': ' : ''}${firstname} ${lastname}${organization ? ', ' + organization : ''}`,
+        `${isMultiple ? schemaServices.lookup('nomineeTypes', type) + ': ' : ''}${firstname} ${lastname}${organization ? ', ' + schemaServices.lookup('organizations', organization) : ''}`,
         {paragraphGap: 10});
     });
   doc.moveDown(1);
