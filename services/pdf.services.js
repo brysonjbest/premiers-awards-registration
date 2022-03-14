@@ -87,7 +87,9 @@ const generateNominationPDF = async function(jsonData, callback) {
     year='',
     organization='',
     title='',
-    nominees=[],
+    nominee='',
+    nominees='',
+    partners=[],
     nominators= [],
     evaluation= {},
     attachments= []
@@ -130,27 +132,41 @@ const generateNominationPDF = async function(jsonData, callback) {
     addItem(doc, 'Nomination Title', title);
   }
 
-  // Nominees
-  doc.fontSize(14);
-  doc.font('Helvetica-Bold').text(`Nominees`, {paragraphGap: 15});
-  const isMultiple = nominees.length > 1;
-  nominees.forEach(nominee => {
-      const {type = '', firstname = '', lastname = '', organization=''} = nominee || {};
+  // Nominee
+  if (nominee.hasOwnProperty('firstname') && nominee.firstname && nominee.hasOwnProperty('lastname') && nominee.lastname) {
+    doc.fontSize(14);
+    doc.font('Helvetica-Bold').text(`Nominee`, {paragraphGap: 15});
+    const {firstname = '', lastname = '' } = nominee || {};
+    doc.fontSize(12);
+    doc.font('Helvetica').text(`${firstname} ${lastname}`, {paragraphGap: 10});
+    doc.moveDown(1);
+  }
+
+  // Nominees (count)
+  if (nominees > 0) {
+    addItem(doc, 'Number of Nominees', nominees);
+  }
+
+  // Partners
+  if (partners.length > 0) {
+    doc.fontSize(14);
+    doc.font('Helvetica-Bold').text(`Partners`, {paragraphGap: 15});
+    partners.forEach(partner => {
+      const { organization = '' } = partner || {};
       doc.fontSize(12);
-      doc.font('Helvetica').text(
-        `${isMultiple ? schemaServices.lookup('nomineeTypes', type) + ': ' : ''}${firstname} ${lastname}${organization ? ', ' + schemaServices.lookup('organizations', organization) : ''}`,
-        {paragraphGap: 10});
+      doc.font('Helvetica').text(organization, {paragraphGap: 10});
     });
-  doc.moveDown(1);
+    doc.moveDown(1);
+  }
 
   // Nominators
   doc.fontSize(14);
   doc.font('Helvetica-Bold').text(`Nominators`, {paragraphGap: 15});
   nominators.forEach(nominator => {
-    const {firstname = '', lastname = '', title='', organization=''} = nominator || {};
+    const {firstname = '', lastname = '', title = '', email='' } = nominator || {};
     doc.fontSize(12);
     doc.font('Helvetica').text(
-      `${firstname} ${lastname}${title ? ', ' + title : ''}${organization ? ', ' + organization : ''}`
+      `${firstname} ${lastname}${title ? ', ' + title : ''}${email ? ', ' + email : ''}`
       , {paragraphGap: 10}
     );
   });
