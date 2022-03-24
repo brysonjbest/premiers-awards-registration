@@ -11,7 +11,6 @@ const path = require('path');
 const AdmZip = require("adm-zip");
 const multer = require('multer');
 const AttachmentModel = require("../models/attachment.model");
-const schemaServices = require("./schema.services");
 
 const dataPath = process.env.DATA_PATH
 const maxUploads = 5;
@@ -151,10 +150,9 @@ exports.createZIP = createZIP;
  *
  * @return {Promise}
  * @param jsonData
- * @param zipRoot
  */
 
-const createZIPPackage = async function(jsonData, zipRoot) {
+const createZIPPackage = async function(jsonData) {
 
   // destructure nomination data
   const {
@@ -174,14 +172,14 @@ const createZIPPackage = async function(jsonData, zipRoot) {
   const zip = new AdmZip();
 
   // add submission PDF
-  zip.addLocalFile(submissionFilePath, zipRoot);
+  zip.addLocalFile(submissionFilePath, `nomination-${id}`);
 
   // add attachment PDFs
   const attachments = await AttachmentModel.find({ nomination: _id });
   attachments.map(attachment => {
     const {file = {}} = attachment || {};
     const {path = ''} = file || {};
-    zip.addLocalFile(path, zipRoot);
+    zip.addLocalFile(path, `nomination-${id}`);
   });
 
   // toBuffer() is used to read the data and save it

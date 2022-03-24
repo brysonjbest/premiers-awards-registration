@@ -315,7 +315,7 @@ exports.exporter = async (req, res, next) => {
       zip: async () => {
         // bundle PDF versions in compressed folder
         // - Note: single nomination sent to zipped packager
-        return await createZIPPackage(nominations[0] , 'nomination_package');
+        return await createZIPPackage(nominations[0]);
       }
     }
     const data = exportHandlers.hasOwnProperty(format)
