@@ -79,6 +79,9 @@ function addItem(doc, header, text) {
  */
 
 const generateNominationPDF = async function(jsonData, callback) {
+
+  console.log('Starting PDF generation...', jsonData)
+
   // destructure nomination data
   const {
     _id='',
@@ -94,8 +97,6 @@ const generateNominationPDF = async function(jsonData, callback) {
     evaluation= {},
     attachments= []
   } = jsonData || {};
-
-  console.log('Starting PDF generation...', jsonData)
 
 
   // - use unique sequence number to label file
