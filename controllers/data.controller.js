@@ -186,9 +186,11 @@ exports.submit = async (req, res, next) => {
     data.attachments = await AttachmentModel.find({nomination: id});
 
     // generate downloadable PDF version
-    console.log('(Before) Updated File Path:', data.filePath, data.attachments);
-    data.filePath = await generateNominationPDF(data, next);
+    const packagePath = await generateNominationPDF(data, next);
+    if (!packagePath)
+      return next(Error('PDFCorrupted'));
     console.log('(After) Updated File Path:', data.filePath);
+    data.filePath = packagePath;
 
     // update submission status
     data.submitted = true;

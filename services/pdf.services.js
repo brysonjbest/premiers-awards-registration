@@ -5,6 +5,7 @@
  * MIT Licensed
  */
 
+const AdmZip = require("adm-zip");
 const PDFDocument = require("pdfkit");
 const PDFMerger = require('pdf-merger-js');
 const pdfParser = require('pdf-parse');
@@ -80,8 +81,6 @@ function addItem(doc, header, text) {
 
 const generateNominationPDF = async function(jsonData, callback) {
 
-  console.log('Starting PDF generation...', jsonData)
-
   // destructure nomination data
   const {
     _id='',
@@ -107,8 +106,9 @@ const generateNominationPDF = async function(jsonData, callback) {
   const dirPath = path.join(dataPath, 'generated', String(year));
   const submissionFilePath = path.join(dirPath, filename);
   const mergedFilename = `nomination-${id}.pdf`;
+  const mergedZipFilename = `nomination-${id}.zip`;
   const mergedFilePath = path.join(dirPath, mergedFilename);
-
+  const mergedZipFilePath = path.join(dirPath, mergedZipFilename);
 
   // ensure directory path exists
   fs.mkdir(dirPath, { recursive: true }, (err) => {
@@ -222,23 +222,36 @@ const generateNominationPDF = async function(jsonData, callback) {
       // include submission PDF file
       merger.add(submissionFilePath);
       // include file attachments
+      console.log('Starting PDF merge...');
       await Promise.all(
         attachments.map(async (attachment) => {
           const {file = {}} = attachment || {};
           const {path = ''} = file || {};
           merger.add(path);
         }));
+      console.log('Saving PDF merge...');
       //save under given name and reset the internal document
       await merger.save(mergedFilePath);
       // // check if page count is exceeded
-      // if (await getPageCount(mergedFilePath) - (range.start + range.count) > attachmentCountLimit) {
-      //   console.log('Page count limit exceeded');
-      //   return callback('Page count limit exceeded');
-      // }
+      if (await getPageCount(mergedFilePath) - (range.start + range.count) > attachmentCountLimit) {
+        console.log('Page count limit exceeded');
+        return null;
+      }
       console.log(`Merged PDF file ${mergedFilename} saved.`);
     } catch (err) {
-      console.error(err);
-      return callback(err);
+      // attachment error: try to combine files into zipped folder
+      const zip = new AdmZip();
+      // add nomination file
+      zip.addLocalFile(submissionFilePath, '/');
+      // add attachments
+      attachments.map(async (attachment) => {
+        const {file = {}} = attachment || {};
+        const {path = ''} = file || {};
+        zip.addLocalFile(path, '/');
+      });
+      zip.writeZip(mergedZipFilePath);
+      console.warn(err);
+      return null;
     }
   })
 
