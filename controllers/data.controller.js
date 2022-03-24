@@ -187,7 +187,7 @@ exports.submit = async (req, res, next) => {
 
     // generate downloadable PDF version
     data.filePath = await generateNominationPDF(data, next);
-    console.log('Updated File Path:', data.filePath)
+    console.log('Updated File Path:', data.filePath);
 
     // update submission status
     data.submitted = true;

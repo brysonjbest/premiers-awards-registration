@@ -194,8 +194,6 @@ const generateNominationPDF = async function(jsonData, callback) {
     Object.keys(evaluation).map(section => {
       // confirm section is included in category
       if (schemaServices.checkSection(section, category)) {
-        let sectionText = evaluation[section];
-        sectionText.replace(/[^A-Za-z;.,/]/g, "");
         addItem(
           doc,
           `${schemaServices.lookup('evaluationSections', section)}`, evaluation[section] || 'n/a');
@@ -218,6 +216,7 @@ const generateNominationPDF = async function(jsonData, callback) {
       const merger = new PDFMerger();
       // include submission PDF file
       merger.add(submissionFilePath);
+      console.log('Starting PDF merge...')
       // include file attachments
       await Promise.all(
         attachments.map(async (attachment) => {
@@ -234,7 +233,7 @@ const generateNominationPDF = async function(jsonData, callback) {
       // }
       console.log(`Merged PDF file ${mergedFilename} saved.`);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return callback(err);
     }
   })

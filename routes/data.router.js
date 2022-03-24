@@ -23,4 +23,5 @@ router.post('/submit/:id', authorizeData, nominationController.submit);
 router.get('/unsubmit/:id', authorizeAdmin, nominationController.unsubmit);
 router.get('/delete/:id', authorizeData, nominationController.delete);
 router.post('/export/:format', authorizeAdmin, nominationController.exporter);
+router.post('/download/:id', authorizeAdmin, nominationController.download);
 module.exports = router;
