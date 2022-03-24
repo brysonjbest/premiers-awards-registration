@@ -144,7 +144,7 @@ const generateNominationPDF = async function(jsonData, callback) {
 
   // Nominees (count)
   if (nominees > 0) {
-    addItem(doc, 'Number of Nominees', nominees);
+    addItem(doc, 'Number of Nominees', String(nominees));
   }
 
   // Partners
