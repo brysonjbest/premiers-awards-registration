@@ -105,6 +105,8 @@ const generateNominationPDF = async function(jsonData, callback) {
   const mergedFilename = `nomination-${id}.pdf`;
   const mergedFilePath = path.join(dirPath, mergedFilename);
 
+  console.log('Starting PDF generation...', id, filename, submissionFilePath, mergedFilename, mergedFilePath)
+
   // ensure directory path exists
   fs.mkdir(dirPath, { recursive: true }, (err) => {
     if (err) throw err;
@@ -216,7 +218,6 @@ const generateNominationPDF = async function(jsonData, callback) {
       const merger = new PDFMerger();
       // include submission PDF file
       merger.add(submissionFilePath);
-      console.log('Starting PDF merge...')
       // include file attachments
       await Promise.all(
         attachments.map(async (attachment) => {
