@@ -95,6 +95,9 @@ const generateNominationPDF = async function(jsonData, callback) {
     attachments= []
   } = jsonData || {};
 
+  console.log('Starting PDF generation...', jsonData)
+
+
   // - use unique sequence number to label file
   // - pad sequence with 00000
   const id = ('00000' + parseInt(seq)).slice(-5);
@@ -105,7 +108,6 @@ const generateNominationPDF = async function(jsonData, callback) {
   const mergedFilename = `nomination-${id}.pdf`;
   const mergedFilePath = path.join(dirPath, mergedFilename);
 
-  console.log('Starting PDF generation...', id, filename, submissionFilePath, mergedFilename, mergedFilePath)
 
   // ensure directory path exists
   fs.mkdir(dirPath, { recursive: true }, (err) => {
