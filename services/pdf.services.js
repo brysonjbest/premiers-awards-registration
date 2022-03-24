@@ -194,6 +194,8 @@ const generateNominationPDF = async function(jsonData, callback) {
     Object.keys(evaluation).map(section => {
       // confirm section is included in category
       if (schemaServices.checkSection(section, category)) {
+        let sectionText = evaluation[section];
+        sectionText.replace(/[^A-Za-z;.,/]/g, "");
         addItem(
           doc,
           `${schemaServices.lookup('evaluationSections', section)}`, evaluation[section] || 'n/a');
@@ -225,11 +227,11 @@ const generateNominationPDF = async function(jsonData, callback) {
         }));
       //save under given name and reset the internal document
       await merger.save(mergedFilePath);
-      // check if page count is exceeded
-      if (await getPageCount(mergedFilePath) - (range.start + range.count) > attachmentCountLimit) {
-        console.log('Page count limit exceeded');
-        return callback('Page count limit exceeded');
-      }
+      // // check if page count is exceeded
+      // if (await getPageCount(mergedFilePath) - (range.start + range.count) > attachmentCountLimit) {
+      //   console.log('Page count limit exceeded');
+      //   return callback('Page count limit exceeded');
+      // }
       console.log(`Merged PDF file ${mergedFilename} saved.`);
     } catch (err) {
       console.log(err);
