@@ -5,23 +5,25 @@
  * MIT Licensed
  */
 
-'use strict';
+"use strict";
 
-const express = require('express');
-const history = require('connect-history-api-fallback');
-const path = require('path');
-const cors = require('cors');
-const {notFoundHandler, globalHandler} = require('./error');
-const indexRouter = require('./routes/index.router');
-const settingsRouter = require('./routes/settings.router');
-const dataRouter = require('./routes/data.router');
-const attachmentsRouter = require('./routes/attachments.router');
-const secureRouter = require('./routes/user.router');
-const frontendRouter = require('./routes/frontend.router');
-const db = require('./db');
-const mongoSanitize = require('express-mongo-sanitize');
-const cookieParser = require('cookie-parser');
-const {authenticate} = require('./services/auth.services')
+const express = require("express");
+const history = require("connect-history-api-fallback");
+const path = require("path");
+const cors = require("cors");
+const { notFoundHandler, globalHandler } = require("./error");
+const indexRouter = require("./routes/index.router");
+const settingsRouter = require("./routes/settings.router");
+const dataRouter = require("./routes/data.router");
+const attachmentsRouter = require("./routes/attachments.router");
+const secureRouter = require("./routes/user.router");
+const frontendRouter = require("./routes/frontend.router");
+const db = require("./db");
+const mongoSanitize = require("express-mongo-sanitize");
+const cookieParser = require("cookie-parser");
+const { authenticate } = require("./services/auth.services");
+const eventRegistrationRouter = require("./table_registration/routes/registration.router");
+const tableRegRouter = require("./table_registration/routes/index-tableregistration.router");
 // const helmet = require('helmet');
 
 /**
@@ -42,77 +44,99 @@ const {authenticate} = require('./services/auth.services')
  *   Online checker: http://cyh.herokuapp.com/cyh.
  */
 
-const allowedOrigins = process.env.NODE_ENV === 'production'
-    ? ["https://premiersawards.gww.gov.bc.ca", "http://pa-app-node"]
+const allowedOrigins =
+  process.env.NODE_ENV === "production"
+    ? ["https://premiersawards.gww.gov.bc.ca", "http://pa-app-node", "pa.apps.silver.devops.gov.bc.ca", "http://pa-node"]
     : [
-      "http://localhost:3000",
-      "http://localhost:3001",
-      "http://localhost:3002",
-      "http://localhost",
-    ];
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://localhost",
+      ];
 
 const corsConfig = {
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg =
         "The CORS policy for this site does not " +
-        "allow access from the specified origin: \n" + origin;
+        "allow access from the specified origin: \n" +
+        origin;
       return callback(new Error(msg), false);
     }
     return callback(null, true);
   },
-  methods: ['GET', 'POST'],
+  methods: ["GET", "POST"],
   credentials: true,
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 /**
  * Frontend application (Vue) server
  */
 
 const frontend = express();
-frontend.disable('x-powered-by');
+frontend.disable("x-powered-by");
 frontend.use(express.json());
 frontend.use(express.urlencoded({ extended: true }));
 frontend.use(cors(corsConfig));
 frontend.use(history());
-frontend.get('/', frontendRouter);
-frontend.use('/', express.static(path.join(__dirname, 'views')));
-console.log('Serving frontend files at ', path.join(__dirname, 'views'));
+frontend.get("/", frontendRouter);
+frontend.use("/", express.static(path.join(__dirname, "views")));
+console.log("Serving frontend files at ", path.join(__dirname, "views"));
+
+/**
+ * Table Registration Component (Vue) server
+ */
+
+const tableReg = express();
+tableReg.disable("x-powered-by");
+tableReg.use(express.json());
+tableReg.use(express.urlencoded({ extended: true }));
+tableReg.use(cors(corsConfig));
+tableReg.use(history());
+tableReg.get("/", tableRegRouter);
+//console.log('Serving tableregistration files');
+tableReg.use(
+  "/",
+  express.static(path.join(__dirname, "table_registration/views"))
+);
+console.log(
+  "Serving tableregistration files at ",
+  path.join(__dirname, "table_registration/views")
+);
 
 /**
  * API server
  */
 
 const api = express();
-api.disable('x-powered-by');
+api.disable("x-powered-by");
 // app.use(helmet({contentSecurityPolicy: false}));
 api.use(express.json());
 api.use(express.urlencoded({ extended: true }));
 api.use(cors(corsConfig));
 
 // parse cookies to store session data
-api.use(cookieParser(
-  process.env.COOKIE_SECRET || 'testsecret'
-));
+api.use(cookieParser(process.env.COOKIE_SECRET || "testsecret"));
 
 // log all requests
-api.use(function timeLog (req, res, next) {
+api.use(function timeLog(req, res, next) {
   const d = new Date();
-  console.log('Request: ', req.method, req.path, d);
+  console.log("Request: ", req.method, req.path, d);
   next();
 });
 
 // authenticate user for all routes
-api.all('*', authenticate);
+api.all("*", authenticate);
 
 // initialize routers for API calls
-api.use('/', indexRouter);
-indexRouter.use('/settings', settingsRouter);
-indexRouter.use('/data', dataRouter);
-indexRouter.use('/attachments', attachmentsRouter);
-indexRouter.use('/users', secureRouter);
+api.use("/", indexRouter);
+indexRouter.use("/settings", settingsRouter);
+indexRouter.use("/data", dataRouter);
+indexRouter.use("/attachments", attachmentsRouter);
+indexRouter.use("/users", secureRouter);
+indexRouter.use("/tables", eventRegistrationRouter);
 
 // sanitize db keys to prevent injection
 api.use(mongoSanitize());
@@ -127,7 +151,12 @@ api.use(notFoundHandler);
 frontend.listen(3000, () => {
   console.log(`Frontend server is running on port 3000.`);
 });
+
+tableReg.listen(3002, () => {
+  console.log(`Table registration server is running on port 3002.`);
+});
+
 api.listen(3001, () => {
   console.log(`API server is running on port 3001.`);
-  console.log(`Run mode: ${process.env.NODE_ENV}`)
+  console.log(`Run mode: ${process.env.NODE_ENV}`);
 });

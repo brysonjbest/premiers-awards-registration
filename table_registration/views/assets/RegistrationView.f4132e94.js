@@ -1,0 +1,1 @@
+import{I as e}from"./InputFinancial.32e2c01f.js";import{o as t,c as a,d as o}from"./index.4facfd7c.js";import"./index.esm.469a7800.js";const p={__name:"RegistrationView",setup(r){return(n,c)=>(t(),a("main",null,[o(e)]))}};export{p as default};
