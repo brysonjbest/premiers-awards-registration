@@ -46,7 +46,13 @@ const tableRegRouter = require("./table_registration/routes/index-tableregistrat
 
 const allowedOrigins =
   process.env.NODE_ENV === "production"
-    ? ["https://premiersawards.gww.gov.bc.ca", "http://pa-app-node", "pa.apps.silver.devops.gov.bc.ca", "http://pa-node"]
+    ? [
+        "https://premiersawards.gww.gov.bc.ca",
+          "http://pa-app-node",
+          "pa.apps.silver.devops.gov.bc.ca",
+          "http://pa-node",
+          "engagement.gww.gov.bc.ca"
+      ]
     : [
         "http://localhost:3000",
         "http://localhost:3001",
