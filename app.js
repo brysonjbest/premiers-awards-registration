@@ -96,7 +96,6 @@ tableReg.use(express.urlencoded({ extended: true }));
 tableReg.use(cors(corsConfig));
 tableReg.use(history());
 tableReg.get("/", tableRegRouter);
-//console.log('Serving tableregistration files');
 tableReg.use(
   "/",
   express.static(path.join(__dirname, "table_registration/views"))
