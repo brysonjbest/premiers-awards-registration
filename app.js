@@ -49,9 +49,9 @@ const allowedOrigins =
     ? [
         "https://premiersawards.gww.gov.bc.ca",
           "http://pa-app-node",
-          "pa.apps.silver.devops.gov.bc.ca",
+          "http://pa.apps.silver.devops.gov.bc.ca",
           "http://pa-node",
-          "engagement.gww.gov.bc.ca"
+          "https://engagement.gww.gov.bc.ca"
       ]
     : [
         "http://localhost:3000",
