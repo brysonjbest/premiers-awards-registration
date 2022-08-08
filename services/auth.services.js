@@ -10,7 +10,6 @@ const UserModel = require('../models/user.model');
 const NominationModel = require('../models/nomination.model')
 const AttachmentModel = require('../models/attachment.model')
 const {validateEmail} = require('./validation.services')
-const proxyURL = 'https://premiersawards.gww.gov.bc.ca';
 
 'use strict';
 
@@ -27,8 +26,8 @@ const proxyURL = 'https://premiersawards.gww.gov.bc.ca';
 
 exports.authenticate = async (req, res, next) => {
   try {
-    // skip authentication if not in production env
-    if (process.env.NODE_ENV !== 'production') {
+    // skip authentication if testing on local development
+    if (process.env.NODE_ENV === 'local') {
       res.locals.user = await UserModel.findOne({
         guid: process.env.TEST_ADMIN_GUID
       })
@@ -50,7 +49,7 @@ exports.authenticate = async (req, res, next) => {
     const SessionCookie = "session=" + session + "; " + expires + "; path=/; HttpOnly; Secure=true;";
 
     // call SAML API - user data endpoint
-    let response = await axios.get(`${proxyURL}/user_info`, {
+    let response = await axios.get(`${process.env.APP_BASE_URL}/user_info`, {
       headers: {
         'Cookie': `${SessionCookie} ${SMSCookie}`
       }
