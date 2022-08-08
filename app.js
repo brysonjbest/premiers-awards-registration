@@ -159,4 +159,5 @@ tableReg.listen(3002, () => {
 api.listen(3001, () => {
   console.log(`API server is running on port 3001.`);
   console.log(`Run mode: ${process.env.NODE_ENV}`);
+  console.log(`Base URL: ${process.env.APP_BASE_URL}`);
 });
