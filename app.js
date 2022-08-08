@@ -45,20 +45,14 @@ const tableRegRouter = require("./table_registration/routes/index-tableregistrat
  */
 
 const allowedOrigins =
-  process.env.NODE_ENV === "production"
-    ? [
-        "https://premiersawards.gww.gov.bc.ca",
-          "http://pa-app-node",
-          "http://pa.apps.silver.devops.gov.bc.ca",
-          "http://pa-node",
-          "https://engagement.gww.gov.bc.ca"
+  process.env.NODE_ENV === "local"
+      ? [
+          "http://localhost:3000",
+          "http://localhost:3001",
+          "http://localhost:3002",
+          "http://localhost",
       ]
-    : [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3002",
-        "http://localhost",
-      ];
+      : [process.env.APP_BASE_URL];
 
 const corsConfig = {
   origin: function (origin, callback) {
