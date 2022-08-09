@@ -1,0 +1,1 @@
+import{_ as s,b as t,o,c as a,d as c,w as r,e as n}from"./index.4facfd7c.js";const _={},i={class:"page-unauthorized"},d=n("401 - Unauthorized. Please sign in to access this site.");function l(p,f,u,h,m,x){const e=t("Message");return o(),a("div",i,[c(e,{severity:"error",closable:!1},{default:r(()=>[d]),_:1})])}var v=s(_,[["render",l]]);export{v as default};
