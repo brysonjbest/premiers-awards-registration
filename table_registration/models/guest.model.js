@@ -45,6 +45,9 @@ const GuestSchema = new Schema(
     dietary: {
       type: Array,
     },
+    notes: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
