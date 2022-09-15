@@ -27,7 +27,9 @@ exports.getSettings = async (req, res, next) => {
         salesclose: "2022-11-07T17:00:00",
       });
     }
-    const settings = await EventSettingsModel.find({});
+    const settings = await EventSettingsModel.findById({
+      _id: "globalSettings",
+    });
     return res.status(200).json(settings);
   } catch (err) {
     console.error(err);
