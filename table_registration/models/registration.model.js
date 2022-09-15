@@ -59,6 +59,10 @@ const RegistrationSchema = new Schema(
     submitted: {
       type: Boolean,
     },
+    table: {
+      type: Schema.Types.ObjectId,
+      ref: "Table",
+    },
   },
   { timestamps: true }
 );
