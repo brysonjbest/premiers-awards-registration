@@ -29,8 +29,8 @@ const EventSettingsSchema = new Schema(
 );
 
 const EventSettingsModel = mongoose.model(
-  "Setting",
+  "EventSetting",
   EventSettingsSchema,
-  "settings"
+  "eventsettings"
 );
 module.exports = EventSettingsModel;
