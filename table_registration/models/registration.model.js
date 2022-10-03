@@ -45,7 +45,7 @@ const RegistrationSchema = new Schema(
       type: Number,
     },
     respcode: {
-      type: Number,
+      type: String,
     },
     serviceline: {
       type: Number,
@@ -54,10 +54,14 @@ const RegistrationSchema = new Schema(
       type: Number,
     },
     project: {
-      type: Number,
+      type: String,
     },
     submitted: {
       type: Boolean,
+    },
+    table: {
+      type: Schema.Types.ObjectId,
+      ref: "Table",
     },
   },
   { timestamps: true }

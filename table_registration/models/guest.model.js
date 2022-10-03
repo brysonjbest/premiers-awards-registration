@@ -45,6 +45,13 @@ const GuestSchema = new Schema(
     dietary: {
       type: Array,
     },
+    table: {
+      type: Schema.Types.ObjectId,
+      ref: "Table",
+    },
+    notes: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
