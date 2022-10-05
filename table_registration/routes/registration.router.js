@@ -12,7 +12,7 @@ const tableController = require("../controllers/table.controller");
 const EventSettingsController = require("../controllers/eventsettings.controller");
 const {
   authorizeAdmin,
-  authorizeUser,
+  authorizeRegistrar,
 } = require("../../services/auth.services");
 
 /**
@@ -21,42 +21,50 @@ const {
 
 router.post(
   "/registrations",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.registerTable
 );
 router.post(
   "/registrations/delete/:id",
-  authorizeUser,
+  authorizeRegistrar,
 
   registrationController.deleteRegistration
 );
 router.post(
   "/registrations/:id",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.updateTable
 );
 
-router.post("/guests", authorizeUser, registrationController.registerGuest);
+router.post(
+  "/guests",
+  authorizeRegistrar,
+  registrationController.registerGuest
+);
 router.post(
   "/guests/delete/:id",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.deleteGuest
 );
-router.post("/guests/:id", authorizeUser, registrationController.updateGuest);
-router.get("/guests", authorizeUser, registrationController.getAllGuests);
+router.post(
+  "/guests/:id",
+  authorizeRegistrar,
+  registrationController.updateGuest
+);
+router.get("/guests", authorizeRegistrar, registrationController.getAllGuests);
 router.get(
   "/registrations",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.getAllRegistrations
 );
 router.get(
   "/registrations/:id/",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.getRegistration
 );
 router.get(
   "/registrations/:id/guests",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.getRegistrationGuests
 );
 
