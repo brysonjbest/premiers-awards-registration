@@ -87,11 +87,7 @@ router.get(
 router.get("/seating/:id/", authorizeAdmin, tableController.getTable);
 
 //settings routes
-router.get(
-  "/settings",
-  authorizeRegistrar,
-  EventSettingsController.getSettings
-);
+router.get("/settings", EventSettingsController.getSettings);
 router.post(
   "/settings",
   authorizeAdmin,
