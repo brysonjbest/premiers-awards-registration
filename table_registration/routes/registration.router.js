@@ -78,7 +78,7 @@ router.post(
 router.post("/seating/deleteall", authorizeAdmin, tableController.deleteAll);
 router.post("/seating/:id", authorizeAdmin, tableController.updateTable);
 
-router.get("/seating", authorizeAdmin, tableController.getAllTables);
+router.get("/seating", authorizeRegistrar, tableController.getAllTables);
 router.get(
   "/seating/:id/guests",
   authorizeAdmin,
