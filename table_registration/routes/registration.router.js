@@ -12,7 +12,7 @@ const tableController = require("../controllers/table.controller");
 const EventSettingsController = require("../controllers/eventsettings.controller");
 const {
   authorizeAdmin,
-  authorizeSuperAdmin,
+  authorizeUser,
 } = require("../../services/auth.services");
 
 /**
