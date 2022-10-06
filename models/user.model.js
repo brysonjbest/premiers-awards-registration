@@ -35,7 +35,13 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["inactive", "nominator", "administrator", "super-administrator"],
+      enum: [
+        "inactive",
+        "nominator",
+        "registrar",
+        "administrator",
+        "super-administrator",
+      ],
       required: true,
     },
     eventregistrar: {
