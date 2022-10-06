@@ -196,6 +196,21 @@ exports.authorizeUser = async (req, res, next) => {
  * @src public
  */
 
+exports.authorizeRegistrar = async (req, res, next) => {
+  if (!res.locals.user) return next(new Error("noAuth"));
+  const { role = "" } = res.locals.user || {};
+  if (
+    role === "registrar" ||
+    role === "nominator" ||
+    role === "administrator" ||
+    role === "super-administrator"
+  ) {
+    next();
+  } else {
+    return next(new Error("noAuth"));
+  }
+};
+
 exports.authorizeAdmin = async (req, res, next) => {
   if (!res.locals.user) return next(new Error("noAuth"));
   const { role = "" } = res.locals.user || {};
