@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:table_registration/views/assets/settings.services.0cd04bb2.js
-import{p as e,q as t}from"./index.31b87afe.js";/*!
-========
-import{p as e,q as t}from"./index.0d49d665.js";/*!
->>>>>>>> dev:table_registration/views/assets/settings.services.b99c161d.js
+import{p as e,q as t}from"./index.7f73ced5.js";/*!
  * Form services/utilities (Vue)
  * File: forms.services.js
  * Copyright(c) 2022 BC Gov

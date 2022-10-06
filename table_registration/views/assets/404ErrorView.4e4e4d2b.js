@@ -1,1 +1,0 @@
-import{_ as o,b as s,o as t,c as a,d as r,w as c,e as n}from"./index.0d49d665.js";const _={},d={class:"page-not-found"},i=n("404: Page could not be found.");function l(p,f,m,u,x,g){const e=s("PrimeMessage");return t(),a("div",d,[r(e,{severity:"error",closable:!1},{default:c(()=>[i]),_:1})])}var v=o(_,[["render",l]]);export{v as default};
