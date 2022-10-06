@@ -5,8 +5,8 @@
  * MIT Licensed
  */
 
-const UserModel = require('../models/user.model');
-const auth = require('../services/auth.services');
+const UserModel = require("../models/user.model");
+const auth = require("../services/auth.services");
 
 /**
  * Register new user
@@ -21,20 +21,22 @@ const auth = require('../services/auth.services');
 exports.register = async (req, res, next) => {
   try {
     const {
-      guid='',
-      username='',
-      firstname='',
-      lastname='',
-      email=''
+      guid = "",
+      username = "",
+      firstname = "",
+      lastname = "",
+      email = "",
+      eventregistrar = false,
     } = req.body || {};
     // ensure role is set to 'inactive' for non-activated users
     const user = await auth.create({
-      role: 'inactive',
+      role: "inactive",
       guid: guid,
       username: username,
       firstname: firstname,
       lastname: lastname,
-      email: email
+      email: email,
+      eventregistrar: eventregistrar,
     });
     res.status(201).json(user);
   } catch (err) {
@@ -54,17 +56,18 @@ exports.register = async (req, res, next) => {
 
 exports.activate = async (req, res, next) => {
   try {
-    const { guid=null } = req.params || {};
-    const user = await UserModel.findOne({guid: guid});
-    if (!user)
-      return next(Error('noRecord'));
+    const { guid = null } = req.params || {};
+    const user = await UserModel.findOne({ guid: guid });
+    if (!user) return next(Error("noRecord"));
 
     // update user role to nominator
-    const response = await UserModel.updateOne({guid: guid}, {role: 'nominator'});
+    const response = await UserModel.updateOne(
+      { guid: guid },
+      { role: "nominator" }
+    );
 
     // return new user
     res.status(201).json(response);
-
   } catch (err) {
     return next(err);
   }
@@ -82,13 +85,12 @@ exports.activate = async (req, res, next) => {
 
 exports.assign = async (req, res, next) => {
   try {
-    const { guid=null } = req.params || {};
-    const { role=null } = req.body || {};
-    const user = await UserModel.findOne({guid: guid});
-    if (!user)
-      return next(Error('noRecord'));
+    const { guid = null } = req.params || {};
+    const { role = null } = req.body || {};
+    const user = await UserModel.findOne({ guid: guid });
+    if (!user) return next(Error("noRecord"));
     // update user role
-    const response = await UserModel.updateOne({guid: guid}, {role: role});
+    const response = await UserModel.updateOne({ guid: guid }, { role: role });
     res.status(201).json(response);
   } catch (err) {
     return next(err);
@@ -124,11 +126,11 @@ exports.info = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
   try {
-    const { guid=null } = req.params || {};
-    const user = await UserModel.findOne({guid: guid});
+    const { guid = null } = req.params || {};
+    const user = await UserModel.findOne({ guid: guid });
     return res.status(200).json(user);
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return next(err);
   }
 };
@@ -146,9 +148,8 @@ exports.getAll = async (req, res, next) => {
   try {
     const users = await UserModel.find({});
     return res.status(200).json(users);
-
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return next(err);
   }
 };
@@ -169,18 +170,17 @@ exports.update = async (req, res, next) => {
     let data = req.body;
 
     // look up user
-    const user = await UserModel.findOne({guid: guid});
-    if (!user)
-      return next(Error('noRecord'));
+    const user = await UserModel.findOne({ guid: guid });
+    if (!user) return next(Error("noRecord"));
 
     // update user data in collection
-    const response = await UserModel.updateOne({ _id: user.id }, data);
+    const response = await UserModel.updateOne({ _id: user.id }, data, {
+      runValidators: true,
+    });
     res.status(200).json(response);
-
   } catch (err) {
     return next(err);
   }
-
 };
 
 /**
@@ -195,28 +195,23 @@ exports.update = async (req, res, next) => {
 
 exports.remove = async (req, res, next) => {
   try {
-
     // get requested user GUID
     let guid = req.params.guid;
 
     // look up user
-    const user = await UserModel.findOne({guid: guid});
-    if (!user)
-      return next(Error('noRecord'));
+    const user = await UserModel.findOne({ guid: guid });
+    if (!user) return next(Error("noRecord"));
 
     // ensure user not deleting themselves
-    if ( res.locals.user.guid === guid )
-      return next(Error('invalidInput'));
+    if (res.locals.user.guid === guid) return next(Error("invalidInput"));
 
     // delete user data from collection
-    const response = await UserModel.deleteOne({guid: guid})
+    const response = await UserModel.deleteOne({ guid: guid });
 
     res.status(200).json(response);
-
   } catch (err) {
     return next(err);
   }
-
 };
 
 /**
@@ -231,40 +226,42 @@ exports.remove = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
   try {
-
     // user data has not been retrieved
-    if (!res.locals.user)
-      return next(new Error('noAuth'))
+    if (!res.locals.user) return next(new Error("noAuth"));
 
-    const { guid='', username='' } = res.locals.user;
+    const { guid = "", username = "" } = res.locals.user;
 
-    console.log('Authenticating:', guid, username);
+    console.log("Authenticating:", guid, username);
 
     // user is not properly authenticated
-    if ( !guid || !username )
-      return next(new Error('noAuth'));
+    if (!guid || !username) return next(new Error("noAuth"));
 
     // check if user is an administrator
-    const adminUser = await UserModel.findOne({ guid : guid }) || {};
-    const {email='', role='', firstname='', lastname=''} = adminUser || {};
+    const adminUser = (await UserModel.findOne({ guid: guid })) || {};
+    const {
+      email = "",
+      role = "",
+      firstname = "",
+      lastname = "",
+      eventregistrar = false,
+    } = adminUser || {};
 
     // successful login
     res.status(200).json({
-        message: {msg: 'Login successful!', type: 'success'},
-        user: {
-          guid: guid,
-          username: username,
-          email: email,
-          role: role,
-          firstname: firstname,
-          lastname: lastname
-        }}
-    );
-  }
-  catch (err) {
+      message: { msg: "Login successful!", type: "success" },
+      user: {
+        guid: guid,
+        username: username,
+        email: email,
+        role: role,
+        firstname: firstname,
+        lastname: lastname,
+        eventregistrar: eventregistrar,
+      },
+    });
+  } catch (err) {
     return next(err);
   }
-
 };
 
 /**
@@ -279,19 +276,26 @@ exports.login = async (req, res, next) => {
 
 exports.logout = async (req, res, next) => {
   try {
-
     // clear session data
-    res.cookie("session", null, {httpOnly: true, sameSite: 'strict', signed: true, maxAge: 0});
-    res.cookie("SMSESSION", null, {httpOnly: true, sameSite: 'strict', signed: true, maxAge: 0});
+    res.cookie("session", null, {
+      httpOnly: true,
+      sameSite: "strict",
+      signed: true,
+      maxAge: 0,
+    });
+    res.cookie("SMSESSION", null, {
+      httpOnly: true,
+      sameSite: "strict",
+      signed: true,
+      maxAge: 0,
+    });
 
     // successful login
     res.status(200).json({
-      message: {msg: 'Logout successful!', type: 'success'},
-      user: {}
+      message: { msg: "Logout successful!", type: "success" },
+      user: {},
     });
-  }
-  catch (err) {
+  } catch (err) {
     return next(err);
   }
-
 };

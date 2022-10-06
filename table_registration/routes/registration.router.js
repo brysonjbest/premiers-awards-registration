@@ -11,7 +11,6 @@ const registrationController = require("../controllers/registration.controller")
 const tableController = require("../controllers/table.controller");
 const EventSettingsController = require("../controllers/eventsettings.controller");
 const {
-  authorizeUser,
   authorizeAdmin,
   authorizeRegistrar,
 } = require("../../services/auth.services");
@@ -22,29 +21,37 @@ const {
 
 router.post(
   "/registrations",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.registerTable
 );
 router.post(
   "/registrations/delete/:id",
-  authorizeUser,
+  authorizeRegistrar,
 
   registrationController.deleteRegistration
 );
 router.post(
   "/registrations/:id",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.updateTable
 );
 
-router.post("/guests", authorizeUser, registrationController.registerGuest);
+router.post(
+  "/guests",
+  authorizeRegistrar,
+  registrationController.registerGuest
+);
 router.post(
   "/guests/delete/:id",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.deleteGuest
 );
-router.post("/guests/:id", authorizeUser, registrationController.updateGuest);
-router.get("/guests", authorizeUser, registrationController.getAllGuests);
+router.post(
+  "/guests/:id",
+  authorizeRegistrar,
+  registrationController.updateGuest
+);
+router.get("/guests", authorizeRegistrar, registrationController.getAllGuests);
 router.get(
   "/registrations",
   authorizeAdmin,
@@ -52,12 +59,12 @@ router.get(
 );
 router.get(
   "/registrations/:id/",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.getRegistration
 );
 router.get(
   "/registrations/:id/guests",
-  authorizeUser,
+  authorizeRegistrar,
   registrationController.getRegistrationGuests
 );
 
@@ -71,7 +78,7 @@ router.post(
 router.post("/seating/deleteall", authorizeAdmin, tableController.deleteAll);
 router.post("/seating/:id", authorizeAdmin, tableController.updateTable);
 
-router.get("/seating", authorizeUser, tableController.getAllTables);
+router.get("/seating", authorizeRegistrar, tableController.getAllTables);
 router.get(
   "/seating/:id/guests",
   authorizeAdmin,
