@@ -337,3 +337,53 @@ exports.deleteAll = async (req, res, next) => {
     return next(err);
   }
 };
+
+/**
+ * Push details to table data
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @src public
+ */
+
+exports.pushTableDetails = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+
+    // look up table exists
+    const table = await TableModel.findById(id);
+    if (!table) return next(Error("invalidInput"));
+    await TableModel.updateOne({ _id: id }, { $push: data });
+    const newTable = await TableModel.findById(id);
+    res.status(200).json(newTable);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+/**
+ * Pull details from table data
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @src public
+ */
+
+exports.pullTableDetails = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+
+    // look up table exists
+    const table = await TableModel.findById(id);
+    if (!table) return next(Error("invalidInput"));
+    await TableModel.updateOne({ _id: id }, { $pull: data });
+    const newTable = await TableModel.findById(id);
+    res.status(200).json(newTable);
+  } catch (err) {
+    return next(err);
+  }
+};
